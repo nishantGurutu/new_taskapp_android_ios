@@ -1,0 +1,1190 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:task_management/constant/color_constant.dart';
+import 'package:task_management/constant/custom_toast.dart';
+import 'package:task_management/constant/text_constant.dart';
+import 'package:task_management/controller/lead_controller.dart';
+import 'package:task_management/custom_widget/button_widget.dart';
+import 'package:task_management/custom_widget/task_text_field.dart';
+import 'package:task_management/model/lead_status_lead.dart';
+import 'package:task_management/model/source_list_model.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:dotted_border/dotted_border.dart';
+
+class LeadDetailUpdate extends StatefulWidget {
+  final dynamic leadId;
+  const LeadDetailUpdate({super.key, required this.leadId});
+
+  @override
+  State<LeadDetailUpdate> createState() => _LeadDetailUpdateState();
+}
+
+class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
+  final LeadController leadController = Get.find();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  ValueNotifier<int?> focusedIndexNotifier = ValueNotifier<int?>(null);
+  final TextEditingController leadNameController = TextEditingController();
+  final TextEditingController companyNameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController surceController = TextEditingController();
+  final TextEditingController industryController = TextEditingController();
+  final TextEditingController statusController = TextEditingController();
+  final TextEditingController tagController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController designationController = TextEditingController();
+  final TextEditingController noofprojectController = TextEditingController();
+  final TextEditingController regionalofficeController =
+      TextEditingController();
+  final TextEditingController referenceDetailsController =
+      TextEditingController();
+  final TextEditingController address1Controller = TextEditingController();
+  final TextEditingController address2Controller = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController townController = TextEditingController();
+  final TextEditingController postalController = TextEditingController();
+  final TextEditingController sectorController = TextEditingController();
+  final TextEditingController localityController = TextEditingController();
+  final TextEditingController countryController = TextEditingController();
+  final TextEditingController stateController = TextEditingController();
+
+  @override
+  void initState() {
+    Future.microtask(() {
+      leadController.selectedSourceListData.value = null;
+      leadController.selectedLeadStatusData.value = null;
+    });
+    super.initState();
+    apiCalling();
+  }
+
+  var isLoading = false.obs;
+  void apiCalling() async {
+    isLoading.value = true;
+    Future.microtask(() {
+      leadController.leadDetailsApi(leadId: widget.leadId);
+    });
+    leadNameController.text = leadController.leadDetails.value?.leadName ?? "";
+    companyNameController.text =
+        leadController.leadDetails.value?.company ?? "";
+    phoneController.text = leadController.leadDetails.value?.phone ?? "";
+    emailController.text = leadController.leadDetails.value?.email ?? "";
+    industryController.text = leadController.leadDetails.value?.company ?? "";
+    descriptionController.text =
+        leadController.leadDetails.value?.description ?? "";
+    addressController.text =
+        '${leadController.leadDetails.value?.addressLine1 ?? ""} ${leadController.leadDetails.value?.addressLine2 ?? ""} ${leadController.leadDetails.value?.addressType ?? ""}';
+    designationController.text =
+        leadController.leadDetails.value?.designation ?? "";
+
+    isLoading.value = false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: backgroundColor,
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            color: Color(0xFF000000),
+            size: 20,
+          ),
+        ),
+        title: const Text(
+          "Leads Details Update",
+          style: TextStyle(
+            color: Color(0xFF000000),
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        backgroundColor: backgroundColor,
+        elevation: 0,
+      ),
+      body: Obx(
+        () => leadController.isLeadDetailsLoading.value == true &&
+                isLoading.value == true
+            ? Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Lead Name",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        TaskCustomTextField(
+                          controller: leadNameController,
+                          textCapitalization: TextCapitalization.sentences,
+                          data: leadName,
+                          hintText: leadName,
+                          labelText: leadName,
+                          index: 0,
+                          focusedIndexNotifier: focusedIndexNotifier,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Company Name",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        TaskCustomTextField(
+                          controller: companyNameController,
+                          textCapitalization: TextCapitalization.sentences,
+                          data: companyName,
+                          hintText: companyName,
+                          labelText: companyName,
+                          index: 1,
+                          focusedIndexNotifier: focusedIndexNotifier,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Phone",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        TaskCustomTextField(
+                          controller: phoneController,
+                          textCapitalization: TextCapitalization.none,
+                          keyboardType: TextInputType.number,
+                          data: phone,
+                          hintText: phone,
+                          labelText: phone,
+                          index: 2,
+                          maxLength: 10,
+                          focusedIndexNotifier: focusedIndexNotifier,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Email",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        TaskCustomTextField(
+                          controller: emailController,
+                          textCapitalization: TextCapitalization.none,
+                          keyboardType: TextInputType.emailAddress,
+                          data: email,
+                          hintText: email,
+                          labelText: email,
+                          index: 11,
+                          focusedIndexNotifier: focusedIndexNotifier,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Designation",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        TaskCustomTextField(
+                          controller: designationController,
+                          textCapitalization: TextCapitalization.none,
+                          keyboardType: TextInputType.emailAddress,
+                          data: 'designation',
+                          hintText: 'Designation',
+                          labelText: 'Designation',
+                          index: 15,
+                          focusedIndexNotifier: focusedIndexNotifier,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Gender",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        Obx(
+                          () => DropdownButtonHideUnderline(
+                            child: DropdownButton2<String>(
+                              isExpanded: true,
+                              items:
+                                  leadController.genderList.map((String item) {
+                                return DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: TextStyle(
+                                      decoration: TextDecoration.none,
+                                      fontFamily: 'Roboto',
+                                      color: darkGreyColor,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                );
+                              }).toList(),
+                              value: leadController.selectedGender.value.isEmpty
+                                  ? null
+                                  : leadController.selectedGender.value,
+                              onChanged: (String? value) {
+                                leadController.selectedGender.value =
+                                    value ?? '';
+                              },
+                              buttonStyleData: ButtonStyleData(
+                                height: 50,
+                                width: double.infinity,
+                                padding:
+                                    const EdgeInsets.only(left: 14, right: 14),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14.r),
+                                  border: Border.all(color: lightBorderColor),
+                                  color: whiteColor,
+                                ),
+                              ),
+                              hint: Text(
+                                'Select gender',
+                                style: TextStyle(
+                                  decoration: TextDecoration.none,
+                                  fontFamily: 'Roboto',
+                                  color: darkGreyColor,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              iconStyleData: IconStyleData(
+                                icon: Image.asset(
+                                  'assets/images/png/Vector 3.png',
+                                  color: secondaryColor,
+                                  height: 8.h,
+                                ),
+                                iconSize: 14,
+                                iconEnabledColor: lightGreyColor,
+                                iconDisabledColor: lightGreyColor,
+                              ),
+                              dropdownStyleData: DropdownStyleData(
+                                maxHeight: 200.h,
+                                width: 335.w,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(14.r),
+                                    color: whiteColor,
+                                    border:
+                                        Border.all(color: lightBorderColor)),
+                                offset: const Offset(0, 0),
+                                scrollbarTheme: ScrollbarThemeData(
+                                  radius: const Radius.circular(40),
+                                  thickness: WidgetStateProperty.all<double>(6),
+                                  thumbVisibility:
+                                      WidgetStateProperty.all<bool>(true),
+                                ),
+                              ),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                                padding: EdgeInsets.only(left: 14, right: 14),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Source",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        Obx(
+                          () => DropdownButtonHideUnderline(
+                            child: DropdownButton2<SourceListData>(
+                              isExpanded: true,
+                              items: leadController.sourceListData.isEmpty
+                                  ? null
+                                  : leadController.sourceListData
+                                      .map((SourceListData item) {
+                                      return DropdownMenuItem<SourceListData>(
+                                        value: item,
+                                        child: Text(
+                                          item.sourceName ?? '',
+                                          style: TextStyle(
+                                            decoration: TextDecoration.none,
+                                            fontFamily: 'Roboto',
+                                            color: darkGreyColor,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      );
+                                    }).toList(),
+                              value:
+                                  leadController.selectedSourceListData.value,
+                              onChanged: (SourceListData? value) {
+                                if (value != null) {
+                                  leadController.selectedSourceListData.value =
+                                      value;
+                                }
+                              },
+                              buttonStyleData: ButtonStyleData(
+                                height: 50,
+                                width: double.infinity,
+                                padding:
+                                    const EdgeInsets.only(left: 14, right: 14),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14.r),
+                                  border: Border.all(color: lightBorderColor),
+                                  color: whiteColor,
+                                ),
+                              ),
+                              hint: Text(
+                                "Select Source".tr,
+                                style: TextStyle(
+                                  decoration: TextDecoration.none,
+                                  fontFamily: 'Roboto',
+                                  color: darkGreyColor,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              iconStyleData: IconStyleData(
+                                icon: Image.asset(
+                                  'assets/images/png/Vector 3.png',
+                                  color: secondaryColor,
+                                  height: 8.h,
+                                ),
+                                iconSize: 14,
+                                iconEnabledColor: lightGreyColor,
+                                iconDisabledColor: lightGreyColor,
+                              ),
+                              dropdownStyleData: DropdownStyleData(
+                                maxHeight: 200.h,
+                                width: 330.w,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(14.r),
+                                    color: whiteColor,
+                                    border:
+                                        Border.all(color: lightBorderColor)),
+                                offset: const Offset(0, 0),
+                                scrollbarTheme: ScrollbarThemeData(
+                                  radius: const Radius.circular(40),
+                                  thickness: WidgetStateProperty.all<double>(6),
+                                  thumbVisibility:
+                                      WidgetStateProperty.all<bool>(true),
+                                ),
+                              ),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                                padding: EdgeInsets.only(left: 14, right: 14),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "No of project",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        TaskCustomTextField(
+                          controller: noofprojectController,
+                          textCapitalization: TextCapitalization.none,
+                          keyboardType: TextInputType.emailAddress,
+                          data: 'project',
+                          hintText: 'No of project',
+                          labelText: 'No of project',
+                          index: 16,
+                          focusedIndexNotifier: focusedIndexNotifier,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Regional office",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        TaskCustomTextField(
+                          controller: regionalofficeController,
+                          textCapitalization: TextCapitalization.none,
+                          keyboardType: TextInputType.emailAddress,
+                          data: 'office',
+                          hintText: 'Regional office',
+                          labelText: 'Regional office',
+                          index: 17,
+                          focusedIndexNotifier: focusedIndexNotifier,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Status",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        Obx(
+                          () => DropdownButtonHideUnderline(
+                            child: DropdownButton2<LeadStatusData>(
+                              isExpanded: true,
+                              items: leadController.leadStatusData.isEmpty
+                                  ? null
+                                  : leadController.leadStatusData
+                                      .map((LeadStatusData item) {
+                                      return DropdownMenuItem<LeadStatusData>(
+                                        value: item,
+                                        child: Text(
+                                          item.name ?? '',
+                                          style: TextStyle(
+                                            decoration: TextDecoration.none,
+                                            fontFamily: 'Roboto',
+                                            color: darkGreyColor,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 16,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      );
+                                    }).toList(),
+                              value:
+                                  leadController.selectedLeadStatusData.value,
+                              onChanged: (LeadStatusData? value) {
+                                if (value != null) {
+                                  leadController.selectedLeadStatusData.value =
+                                      value;
+                                }
+                              },
+                              buttonStyleData: ButtonStyleData(
+                                height: 50,
+                                width: double.infinity,
+                                padding:
+                                    const EdgeInsets.only(left: 14, right: 14),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14.r),
+                                  border: Border.all(color: lightBorderColor),
+                                  color: whiteColor,
+                                ),
+                              ),
+                              hint: Text(
+                                "Select Status".tr,
+                                style: TextStyle(
+                                  decoration: TextDecoration.none,
+                                  fontFamily: 'Roboto',
+                                  color: darkGreyColor,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              iconStyleData: IconStyleData(
+                                icon: Image.asset(
+                                  'assets/images/png/Vector 3.png',
+                                  color: secondaryColor,
+                                  height: 8.h,
+                                ),
+                                iconSize: 14,
+                                iconEnabledColor: lightGreyColor,
+                                iconDisabledColor: lightGreyColor,
+                              ),
+                              dropdownStyleData: DropdownStyleData(
+                                maxHeight: 200.h,
+                                width: 330.w,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(14.r),
+                                    color: whiteColor,
+                                    border: Border.all(color: whiteColor)),
+                                offset: const Offset(0, 0),
+                                scrollbarTheme: ScrollbarThemeData(
+                                  radius: const Radius.circular(40),
+                                  thickness: WidgetStateProperty.all<double>(6),
+                                  thumbVisibility:
+                                      WidgetStateProperty.all<bool>(true),
+                                ),
+                              ),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                                padding: EdgeInsets.only(left: 14, right: 14),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Reference Details",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        TaskCustomTextField(
+                          controller: referenceDetailsController,
+                          textCapitalization: TextCapitalization.none,
+                          keyboardType: TextInputType.emailAddress,
+                          data: 'reference',
+                          hintText: 'Reference details',
+                          labelText: 'Reference details',
+                          index: 18,
+                          focusedIndexNotifier: focusedIndexNotifier,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Type",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        Obx(() => Row(
+                              children: [
+                                Radio<String>(
+                                  value: 'developer',
+                                  groupValue:
+                                      leadController.selectedUserType.value,
+                                  onChanged: (value) {
+                                    leadController.selectedUserType.value =
+                                        value!;
+                                  },
+                                ),
+                                Text('Developer',
+                                    style: TextStyle(fontSize: 14.sp)),
+                                SizedBox(width: 20.w),
+                                Radio<String>(
+                                  value: 'contractor',
+                                  groupValue:
+                                      leadController.selectedUserType.value,
+                                  onChanged: (value) {
+                                    leadController.selectedUserType.value =
+                                        value!;
+                                  },
+                                ),
+                                Text('Contractor',
+                                    style: TextStyle(fontSize: 14.sp)),
+                              ],
+                            )),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Description",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        TaskCustomTextField(
+                          controller: descriptionController,
+                          textCapitalization: TextCapitalization.sentences,
+                          data: description,
+                          hintText: description,
+                          labelText: description,
+                          index: 7,
+                          focusedIndexNotifier: focusedIndexNotifier,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Address Type",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        Obx(
+                          () => DropdownButtonHideUnderline(
+                            child: DropdownButton2<String>(
+                              isExpanded: true,
+                              items: leadController.addressTypeList
+                                  .map((String item) {
+                                return DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: TextStyle(
+                                      decoration: TextDecoration.none,
+                                      fontFamily: 'Roboto',
+                                      color: darkGreyColor,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                );
+                              }).toList(),
+                              value: leadController
+                                      .selectedAddressType.value.isEmpty
+                                  ? null
+                                  : leadController.selectedAddressType.value,
+                              onChanged: (String? value) {
+                                leadController.selectedAddressType.value =
+                                    value ?? '';
+                              },
+                              buttonStyleData: ButtonStyleData(
+                                height: 50,
+                                width: double.infinity,
+                                padding:
+                                    const EdgeInsets.only(left: 14, right: 14),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14.r),
+                                  border: Border.all(color: lightBorderColor),
+                                  color: whiteColor,
+                                ),
+                              ),
+                              hint: Text(
+                                'Select Address type',
+                                style: TextStyle(
+                                  decoration: TextDecoration.none,
+                                  fontFamily: 'Roboto',
+                                  color: darkGreyColor,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              iconStyleData: IconStyleData(
+                                icon: Image.asset(
+                                  'assets/images/png/Vector 3.png',
+                                  color: secondaryColor,
+                                  height: 8.h,
+                                ),
+                                iconSize: 14,
+                                iconEnabledColor: lightGreyColor,
+                                iconDisabledColor: lightGreyColor,
+                              ),
+                              dropdownStyleData: DropdownStyleData(
+                                maxHeight: 200.h,
+                                width: 335.w,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(14.r),
+                                    color: whiteColor,
+                                    border:
+                                        Border.all(color: lightBorderColor)),
+                                offset: const Offset(0, 0),
+                                scrollbarTheme: ScrollbarThemeData(
+                                  radius: const Radius.circular(40),
+                                  thickness: WidgetStateProperty.all<double>(6),
+                                  thumbVisibility:
+                                      WidgetStateProperty.all<bool>(true),
+                                ),
+                              ),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                                padding: EdgeInsets.only(left: 14, right: 14),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Address 1",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        TaskCustomTextField(
+                          controller: address1Controller,
+                          textCapitalization: TextCapitalization.sentences,
+                          data: address,
+                          hintText: "Address 1",
+                          labelText: "Address 1",
+                          index: 17,
+                          focusedIndexNotifier: focusedIndexNotifier,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Address 2",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        TaskCustomTextField(
+                          controller: address2Controller,
+                          textCapitalization: TextCapitalization.sentences,
+                          data: address,
+                          hintText: "Address 2",
+                          labelText: "Address 2",
+                          index: 20,
+                          focusedIndexNotifier: focusedIndexNotifier,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "City/Town",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        TaskCustomTextField(
+                          controller: cityController,
+                          textCapitalization: TextCapitalization.sentences,
+                          data: 'city',
+                          hintText: "City/Town",
+                          labelText: "City/Town",
+                          index: 17,
+                          focusedIndexNotifier: focusedIndexNotifier,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Postal Code",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        TaskCustomTextField(
+                          controller: postalController,
+                          textCapitalization: TextCapitalization.sentences,
+                          data: 'Postal code',
+                          hintText: 'Postal code',
+                          labelText: 'Postal code',
+                          index: 18,
+                          focusedIndexNotifier: focusedIndexNotifier,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Sector",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        TaskCustomTextField(
+                          controller: sectorController,
+                          textCapitalization: TextCapitalization.sentences,
+                          data: 'Sector',
+                          hintText: 'Sector',
+                          labelText: 'Sector',
+                          index: 18,
+                          focusedIndexNotifier: focusedIndexNotifier,
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Country",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        Obx(
+                          () => DropdownButtonHideUnderline(
+                            child: DropdownButton2<String>(
+                              isExpanded: true,
+                              items:
+                                  leadController.countryList.map((String item) {
+                                return DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: TextStyle(
+                                      decoration: TextDecoration.none,
+                                      fontFamily: 'Roboto',
+                                      color: darkGreyColor,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 16,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                );
+                              }).toList(),
+                              value:
+                                  leadController.selectedCountry.value.isEmpty
+                                      ? null
+                                      : leadController.selectedCountry.value,
+                              onChanged: (String? value) {
+                                leadController.selectedCountry.value =
+                                    value ?? '';
+                              },
+                              buttonStyleData: ButtonStyleData(
+                                height: 50,
+                                width: double.infinity,
+                                padding:
+                                    const EdgeInsets.only(left: 14, right: 14),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14.r),
+                                  border: Border.all(color: lightBorderColor),
+                                  color: whiteColor,
+                                ),
+                              ),
+                              hint: Text(
+                                'Select country',
+                                style: TextStyle(
+                                  decoration: TextDecoration.none,
+                                  fontFamily: 'Roboto',
+                                  color: darkGreyColor,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 16,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              iconStyleData: IconStyleData(
+                                icon: Image.asset(
+                                  'assets/images/png/Vector 3.png',
+                                  color: secondaryColor,
+                                  height: 8.h,
+                                ),
+                                iconSize: 14,
+                                iconEnabledColor: lightGreyColor,
+                                iconDisabledColor: lightGreyColor,
+                              ),
+                              dropdownStyleData: DropdownStyleData(
+                                maxHeight: 500.h,
+                                width: 335.w,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(14.r),
+                                    color: whiteColor,
+                                    border:
+                                        Border.all(color: lightBorderColor)),
+                                offset: const Offset(0, 0),
+                                scrollbarTheme: ScrollbarThemeData(
+                                  radius: const Radius.circular(40),
+                                  thickness: WidgetStateProperty.all<double>(6),
+                                  thumbVisibility:
+                                      WidgetStateProperty.all<bool>(true),
+                                ),
+                              ),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                                padding: EdgeInsets.only(left: 14, right: 14),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Upload Selfie Image",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        Obx(() => DottedBorder(
+                              color: Colors.grey,
+                              borderType: BorderType.RRect,
+                              radius: Radius.circular(12.r),
+                              dashPattern: [6, 4],
+                              strokeWidth: 1.5,
+                              child: InkWell(
+                                onTap: () => takePhoto(ImageSource.camera),
+                                borderRadius: BorderRadius.circular(12.r),
+                                child: Container(
+                                  height: 120.h,
+                                  width: double.infinity,
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 16.w, vertical: 12.h),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey.shade100,
+                                    borderRadius: BorderRadius.circular(12.r),
+                                  ),
+                                  child: leadController.isImageLoading.value
+                                      ? CircularProgressIndicator()
+                                      : (leadController
+                                              .pickedImage.value.isEmpty
+                                          ? Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(Icons.camera_alt_outlined,
+                                                    size: 28.sp,
+                                                    color: Colors.grey),
+                                                SizedBox(height: 8.h),
+                                                Text(
+                                                  "Upload live image",
+                                                  style: TextStyle(
+                                                    fontSize: 14.sp,
+                                                    color: Colors.black54,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          : ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12.r),
+                                              child: Image.file(
+                                                leadController
+                                                    .pickedFile.value!,
+                                                fit: BoxFit.cover,
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                              ),
+                                            )),
+                                ),
+                              ),
+                            )),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Text(
+                          "Upload visiting card",
+                          style: TextStyle(fontSize: 14.sp),
+                        ),
+                        SizedBox(
+                          height: 5.h,
+                        ),
+                        Obx(
+                          () => DottedBorder(
+                            color: Colors.grey,
+                            borderType: BorderType.RRect,
+                            radius: Radius.circular(12.r),
+                            dashPattern: [6, 4],
+                            strokeWidth: 1.5,
+                            child: InkWell(
+                              onTap: () => uploadFile(),
+                              borderRadius: BorderRadius.circular(12.r),
+                              child: Container(
+                                height: 120.h,
+                                width: double.infinity,
+                                alignment: Alignment.center,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16.w, vertical: 12.h),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade100,
+                                  borderRadius: BorderRadius.circular(12.r),
+                                ),
+                                child: leadController
+                                        .pickedVisitingCard.value.isEmpty
+                                    ? Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(Icons.camera_alt_outlined,
+                                              size: 28.sp, color: Colors.grey),
+                                          SizedBox(height: 8.h),
+                                          Text(
+                                            "Upload Visiting Card",
+                                            style: TextStyle(
+                                              fontSize: 14.sp,
+                                              color: Colors.black54,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : Image.file(
+                                        leadController
+                                            .pickedVisitingFile.value!,
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        Obx(
+                          () => CustomButton(
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                if (leadController.isDetailsUpdating.value ==
+                                    false) {
+                                  if (leadController
+                                          .selectedSourceListData.value !=
+                                      null) {
+                                    if (leadController
+                                            .selectedLeadStatusData.value !=
+                                        null) {
+                                      await leadController.updateDetails(
+                                          name: leadNameController.text,
+                                          companyName:
+                                              companyNameController.text,
+                                          phone: phoneController.text,
+                                          email: emailController.text,
+                                          designation:
+                                              designationController.text,
+                                          gender: leadController
+                                              .selectedGender.value,
+                                          source: leadController
+                                              .selectedSourceListData.value,
+                                          status: leadController
+                                              .selectedLeadStatusData.value,
+                                          description:
+                                              descriptionController.text,
+                                          address: addressController.text,
+                                          noofproject:
+                                              noofprojectController.text,
+                                          regionalOffice:
+                                              regionalofficeController.text,
+                                          referenceDetails:
+                                              referenceDetailsController.text,
+                                          type: leadController
+                                              .selectedUserType.value,
+                                          address1: address1Controller.text,
+                                          address2: address2Controller.text,
+                                          addressType: leadController
+                                              .selectedAddressType.value,
+                                          city: cityController.text,
+                                          postalCode: postalController.text,
+                                          sector: sectorController.text,
+                                          country: leadController
+                                              .selectedCountry.value,
+                                          id: widget.leadId);
+                                    } else {
+                                      CustomToast().showCustomToast(
+                                          "Please select status data.");
+                                    }
+                                  } else {
+                                    CustomToast().showCustomToast(
+                                        "Please select source data.");
+                                  }
+                                }
+                              }
+                            },
+                            text: leadController.isDetailsUpdating.value == true
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CircularProgressIndicator(
+                                        color: whiteColor,
+                                      ),
+                                      SizedBox(width: 5.w),
+                                      Text(
+                                        'Loading...',
+                                        style: TextStyle(
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.w400,
+                                            color: whiteColor),
+                                      )
+                                    ],
+                                  )
+                                : Text(
+                                    create,
+                                    style: TextStyle(
+                                      color: whiteColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                            width: double.infinity,
+                            color: primaryColor,
+                            height: 45.h,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+      ),
+    );
+  }
+
+  File? pickedFile;
+  String fileName = "";
+  Future<void> uploadFile() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.any,
+        allowMultiple: false,
+      );
+
+      if (result != null && result.files.isNotEmpty) {
+        String? filePath = result.files.single.path;
+
+        if (filePath == null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: File path is null')),
+          );
+          return;
+        }
+
+        final File file = File(filePath);
+        leadController.pickedVisitingFile.value = File(file.path);
+        leadController.pickedVisitingCard.value =
+            leadController.pickedVisitingFile.value.toString();
+        print(
+            'selected file path from device is ${leadController.pickedVisitingFile.value}');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('No file selected.')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error uploading file: $e')),
+      );
+    }
+  }
+
+  final ImagePicker imagePicker = ImagePicker();
+  Future<void> takePhoto(ImageSource source) async {
+    try {
+      final pickedImage =
+          await imagePicker.pickImage(source: source, imageQuality: 30);
+      if (pickedImage == null) {
+        return;
+      }
+      leadController.isImageLoading.value = true;
+      leadController.pickedFile.value = File(pickedImage.path);
+      leadController.pickedImage.value = pickedImage.path.toString();
+      leadController.isImageLoading.value = false;
+      // Get.back();
+    } catch (e) {
+      leadController.isImageLoading.value = false;
+    } finally {
+      leadController.isImageLoading.value = false;
+    }
+  }
+}
