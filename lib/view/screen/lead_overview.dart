@@ -9,6 +9,7 @@ import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/image_constant.dart';
 import 'package:task_management/constant/style_constant.dart';
 import 'package:task_management/controller/lead_controller.dart';
+import 'package:task_management/custom_widget/network_image_class.dart';
 import 'package:task_management/model/lead_details_model.dart';
 import 'package:task_management/model/lead_visit_list_model.dart';
 import 'package:task_management/view/screen/lead_note.dart';
@@ -544,27 +545,31 @@ class _LeadOverviewScreenState extends State<LeadOverviewScreen>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        height: 60.h,
-                        width: 80.w,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5.r),
-                          ),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(5.r),
-                          ),
-                          child: Image.network(
-                            "${leadDataValue?.image ?? ""}",
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container();
-                            },
-                          ),
-                        ),
-                      ),
+                      // GestureDetector(
+                      //   onTap: () {Get.to(()=>);},
+                      //   child: Container(
+                      //     height: 60.h,
+                      //     width: 80.w,
+                      //     decoration: BoxDecoration(
+                      //       borderRadius: BorderRadius.all(
+                      //         Radius.circular(5.r),
+                      //       ),
+                      //     ),
+                      //     child: ClipRRect(
+                      //       borderRadius: BorderRadius.all(
+                      //         Radius.circular(5.r),
+                      //       ),
+                      //       child: Image.network(
+                      //         "${leadDataValue?.image ?? ""}",
+                      //         fit: BoxFit.cover,
+                      //         errorBuilder: (context, error, stackTrace) {
+                      //           return Container();
+                      //         },
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+                      NetworkImageWidget(imageurl: leadDataValue?.image ?? ""),
                       CustomAudioPlayer(
                         audioUrl: leadDataValue!.audio!,
                         chatId: '',
@@ -594,7 +599,6 @@ class _LeadOverviewScreenState extends State<LeadOverviewScreen>
                   ],
                 ),
                 SizedBox(height: 10.h),
-
                 Row(
                   children: [
                     Text(
