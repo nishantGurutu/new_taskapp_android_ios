@@ -296,17 +296,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       ),
       floatingActionButton: FloatingActionBubble(
         items: <Bubble>[
-          // Bubble(
-          //   title: "Attendance",
-          //   iconColor: Colors.white,
-          //   bubbleColor: primaryColor,
-          //   icon: Icons.add,
-          //   titleStyle: TextStyle(fontSize: 16, color: Colors.white),
-          //   onPress: () {
-          //     Get.to(() => CheckinScreen());
-          //     _animationController.reverse();
-          //   },
-          // ),
+          Bubble(
+            title: "Add Meeting",
+            iconColor: Colors.white,
+            bubbleColor: primaryColor,
+            icon: Icons.add,
+            titleStyle: TextStyle(fontSize: 16, color: Colors.white),
+            onPress: () {
+              Get.to(() => CheckinScreen());
+              _animationController.reverse();
+            },
+          ),
           Bubble(
             title: "Add Leads",
             iconColor: Colors.white,
@@ -338,7 +338,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               }
             },
           ),
-
           Bubble(
             title: "Task",
             iconColor: Colors.white,

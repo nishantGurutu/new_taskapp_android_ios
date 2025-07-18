@@ -569,7 +569,10 @@ class _LeadOverviewScreenState extends State<LeadOverviewScreen>
                       //     ),
                       //   ),
                       // ),
-                      NetworkImageWidget(imageurl: leadDataValue?.image ?? ""),
+                      NetworkImageWidget(
+                          imageurl: leadDataValue?.image ?? "",
+                          height: 60.h,
+                          width: 80.w),
                       CustomAudioPlayer(
                         audioUrl: leadDataValue!.audio!,
                         chatId: '',

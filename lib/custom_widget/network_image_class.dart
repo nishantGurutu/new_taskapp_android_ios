@@ -7,7 +7,13 @@ import 'package:task_management/view/widgets/image_screen.dart';
 
 class NetworkImageWidget extends StatelessWidget {
   final String? imageurl;
-  const NetworkImageWidget({super.key, required this.imageurl});
+  final double? height;
+  final double? width;
+  const NetworkImageWidget(
+      {super.key,
+      required this.imageurl,
+      required this.height,
+      required this.width});
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +24,8 @@ class NetworkImageWidget extends StatelessWidget {
             ));
       },
       child: Container(
+        height: height,
+        width: width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(
             Radius.circular(10.r),
