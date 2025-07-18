@@ -39,6 +39,7 @@ import 'package:task_management/view/screen/follow_ups.dart';
 import 'package:task_management/view/screen/leads_list.dart';
 import 'package:task_management/view/screen/meeting/get_meeting.dart'
     show GetMeetingList;
+import 'package:task_management/view/screen/meeting/meeting_form.dart';
 import 'package:task_management/view/screen/task_screen.dart';
 import 'package:task_management/view/widgets/add_task.dart';
 import 'package:task_management/view/widgets/admin_user_list.dart';
@@ -304,7 +305,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             icon: Icons.add,
             titleStyle: TextStyle(fontSize: 16, color: Colors.white),
             onPress: () {
-              Get.to(() => CheckinScreen());
+              Get.to(() => MeetingScreens(
+                    mergedPeopleList: [],
+                    leadId: '',
+                  ));
               _animationController.reverse();
             },
           ),

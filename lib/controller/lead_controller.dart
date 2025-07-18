@@ -411,7 +411,7 @@ class LeadController extends GetxController {
   Rx<FollowUpsListData?> selectedFollowUpsListData =
       Rx<FollowUpsListData?>(null);
   var isFollowupsListLoading = false.obs;
-  Future<void> followUpsListApi({required int leadId}) async {
+  Future<void> followUpsListApi({required dynamic leadId}) async {
     isFollowupsListLoading.value = true;
     final result = await LeadService().followUpsListApi(leadId);
     if (result != null) {
@@ -1120,7 +1120,7 @@ class LeadController extends GetxController {
     if (result != null) {
       Get.back();
       Get.back();
-      await followUpsListApi(leadId: leadId ?? 0);
+      await followUpsListApi(leadId: leadId);
     } else {}
     isPeopleAdding.value = false;
   }

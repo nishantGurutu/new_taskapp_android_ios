@@ -78,7 +78,6 @@ class LeadService {
           filename: fileName,
         );
       }
-      print('akjhdu diuj8yu8 ijd3h8uy83 i3j89 ${audio.path}');
       if (audio.path.isNotEmpty) {
         final filePath = audio.path;
         final fileName = filePath.split('/').last;
@@ -621,13 +620,16 @@ class LeadService {
       ));
 
       final Map<String, dynamic> formDataMap = {
-        'lead_id': leadId.toString(),
         'follow_up_type': followupsType.toString(),
         'follow_up_date': followupsDate.toString(),
         'follow_up_time': followupsTime.toString(),
         'note': note.toString(),
         'status': status.toString(),
       };
+
+      if (leadId.toString().isNotEmpty) {
+        formDataMap['lead_id'] = leadId;
+      }
 
       final formData = FormData.fromMap(formDataMap);
 
@@ -1421,7 +1423,7 @@ class LeadService {
   }
 
   Future<bool> addFollowup(String followupsType, String followupsDate,
-      String followupsTime, String note, int? status, int? leadId) async {
+      String followupsTime, String note, int? status, dynamic leadId) async {
     try {
       final token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
@@ -1435,7 +1437,6 @@ class LeadService {
       ));
 
       final Map<String, dynamic> formDataMap = {
-        'lead_id': leadId.toString(),
         'follow_up_type': followupsType,
         'follow_up_date': followupsDate,
         'follow_up_time': followupsTime,

@@ -16,9 +16,7 @@ class DatabaseHelper {
   Future<Database> initDatabase() async {
     String path = join(await getDatabasesPath(), 'taskManagement.db');
     return await openDatabase(path,
-        version: 4, // Increment version due to schema change
-        onCreate: _createDb,
-        onUpgrade: _onUpgrade);
+        version: 4, onCreate: _createDb, onUpgrade: _onUpgrade);
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {

@@ -35,7 +35,6 @@ class LeadMeetingController extends GetxController {
       print('sju93n e93ue983uej j93u9 $attendPersons');
       print('sju93n e93ue983uej j93u9 $reminder');
       final Map<String, dynamic> formDataMap = {
-        'lead_id': leadId,
         'meeting_title': meetingTitle,
         'meeting_date': meetingDate,
         'meeting_time': meetingTime,
@@ -47,6 +46,9 @@ class LeadMeetingController extends GetxController {
       if (meetingLink.isNotEmpty) {
         formDataMap['meeting_link'] = meetingLink;
       }
+      if (leadId.isNotEmpty) {
+        formDataMap['lead_id'] = leadId;
+      }
       final formData = dio.FormData.fromMap(formDataMap);
       final response = await _dio.post(
         'https://taskmaster.electionmaster.in/public/api/store-lead-meetings',
@@ -55,10 +57,10 @@ class LeadMeetingController extends GetxController {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         Get.back();
+        CustomToast().showCustomToast(response.data['message']);
         await leadMeetingListController.fetchLeadMeetings(
             leadId: int.parse(leadId));
 
-        CustomToast().showCustomToast(response.data['message']);
         return true;
       } else {
         print("Error: ${response.data}");
