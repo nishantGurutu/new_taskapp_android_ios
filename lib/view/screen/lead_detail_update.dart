@@ -9,6 +9,7 @@ import 'package:task_management/constant/text_constant.dart';
 import 'package:task_management/controller/lead_controller.dart';
 import 'package:task_management/custom_widget/button_widget.dart';
 import 'package:task_management/custom_widget/task_text_field.dart';
+import 'package:task_management/model/lead_list_model.dart';
 import 'package:task_management/model/lead_status_lead.dart';
 import 'package:task_management/model/source_list_model.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,7 +18,9 @@ import 'package:dotted_border/dotted_border.dart';
 
 class LeadDetailUpdate extends StatefulWidget {
   final dynamic leadId;
-  const LeadDetailUpdate({super.key, required this.leadId});
+  final LeadListData leadDetails;
+  const LeadDetailUpdate(
+      {super.key, required this.leadId, required this.leadDetails});
 
   @override
   State<LeadDetailUpdate> createState() => _LeadDetailUpdateState();
@@ -31,27 +34,15 @@ class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
   final TextEditingController companyNameController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController surceController = TextEditingController();
-  final TextEditingController industryController = TextEditingController();
-  final TextEditingController statusController = TextEditingController();
-  final TextEditingController tagController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
   final TextEditingController designationController = TextEditingController();
   final TextEditingController noofprojectController = TextEditingController();
-  final TextEditingController regionalofficeController =
+  final TextEditingController regionalOfficeController =
       TextEditingController();
-  final TextEditingController referenceDetailsController =
-      TextEditingController();
-  final TextEditingController address1Controller = TextEditingController();
-  final TextEditingController address2Controller = TextEditingController();
+  final TextEditingController refdetailsController = TextEditingController();
+  final TextEditingController descrioptionController = TextEditingController();
+  final TextEditingController siteaddressController = TextEditingController();
+  final TextEditingController officeaddressController = TextEditingController();
   final TextEditingController cityController = TextEditingController();
-  final TextEditingController townController = TextEditingController();
-  final TextEditingController postalController = TextEditingController();
-  final TextEditingController sectorController = TextEditingController();
-  final TextEditingController localityController = TextEditingController();
-  final TextEditingController countryController = TextEditingController();
-  final TextEditingController stateController = TextEditingController();
 
   @override
   void initState() {
@@ -59,6 +50,7 @@ class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
       leadController.selectedSourceListData.value = null;
       leadController.selectedLeadStatusData.value = null;
     });
+
     super.initState();
     apiCalling();
   }
@@ -69,19 +61,16 @@ class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
     Future.microtask(() {
       leadController.leadDetailsApi(leadId: widget.leadId);
     });
-    leadNameController.text = leadController.leadDetails.value?.leadName ?? "";
-    companyNameController.text =
-        leadController.leadDetails.value?.company ?? "";
-    phoneController.text = leadController.leadDetails.value?.phone ?? "";
-    emailController.text = leadController.leadDetails.value?.email ?? "";
-    industryController.text = leadController.leadDetails.value?.company ?? "";
-    descriptionController.text =
-        leadController.leadDetails.value?.description ?? "";
-    addressController.text =
-        '${leadController.leadDetails.value?.addressLine1 ?? ""} ${leadController.leadDetails.value?.addressLine2 ?? ""} ${leadController.leadDetails.value?.addressType ?? ""}';
-    designationController.text =
-        leadController.leadDetails.value?.designation ?? "";
-
+    leadNameController.text = widget.leadDetails.leadName ?? "";
+    companyNameController.text = widget.leadDetails.company ?? "";
+    phoneController.text = widget.leadDetails.phone ?? "";
+    emailController.text = widget.leadDetails.email ?? "";
+    companyNameController.text = widget.leadDetails.company ?? "";
+    descrioptionController.text = widget.leadDetails.description ?? "";
+    siteaddressController.text = '${widget.leadDetails.addressLine1 ?? ""}';
+    officeaddressController.text = '${widget.leadDetails.addressLine2 ?? ""}';
+    designationController.text = widget.leadDetails.designation ?? "";
+    cityController.text = widget.leadDetails.cityTown ?? '';
     isLoading.value = false;
   }
 
@@ -226,99 +215,6 @@ class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
                           height: 10.h,
                         ),
                         Text(
-                          "Gender",
-                          style: TextStyle(fontSize: 14.sp),
-                        ),
-                        SizedBox(
-                          height: 5.h,
-                        ),
-                        Obx(
-                          () => DropdownButtonHideUnderline(
-                            child: DropdownButton2<String>(
-                              isExpanded: true,
-                              items:
-                                  leadController.genderList.map((String item) {
-                                return DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(
-                                    item,
-                                    style: TextStyle(
-                                      decoration: TextDecoration.none,
-                                      fontFamily: 'Roboto',
-                                      color: darkGreyColor,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                );
-                              }).toList(),
-                              value: leadController.selectedGender.value.isEmpty
-                                  ? null
-                                  : leadController.selectedGender.value,
-                              onChanged: (String? value) {
-                                leadController.selectedGender.value =
-                                    value ?? '';
-                              },
-                              buttonStyleData: ButtonStyleData(
-                                height: 50,
-                                width: double.infinity,
-                                padding:
-                                    const EdgeInsets.only(left: 14, right: 14),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(14.r),
-                                  border: Border.all(color: lightBorderColor),
-                                  color: whiteColor,
-                                ),
-                              ),
-                              hint: Text(
-                                'Select gender',
-                                style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontFamily: 'Roboto',
-                                  color: darkGreyColor,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 16,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              iconStyleData: IconStyleData(
-                                icon: Image.asset(
-                                  'assets/images/png/Vector 3.png',
-                                  color: secondaryColor,
-                                  height: 8.h,
-                                ),
-                                iconSize: 14,
-                                iconEnabledColor: lightGreyColor,
-                                iconDisabledColor: lightGreyColor,
-                              ),
-                              dropdownStyleData: DropdownStyleData(
-                                maxHeight: 200.h,
-                                width: 335.w,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(14.r),
-                                    color: whiteColor,
-                                    border:
-                                        Border.all(color: lightBorderColor)),
-                                offset: const Offset(0, 0),
-                                scrollbarTheme: ScrollbarThemeData(
-                                  radius: const Radius.circular(40),
-                                  thickness: WidgetStateProperty.all<double>(6),
-                                  thumbVisibility:
-                                      WidgetStateProperty.all<bool>(true),
-                                ),
-                              ),
-                              menuItemStyleData: const MenuItemStyleData(
-                                height: 40,
-                                padding: EdgeInsets.only(left: 14, right: 14),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Text(
                           "Source",
                           style: TextStyle(fontSize: 14.sp),
                         ),
@@ -424,7 +320,7 @@ class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
                         TaskCustomTextField(
                           controller: noofprojectController,
                           textCapitalization: TextCapitalization.none,
-                          keyboardType: TextInputType.emailAddress,
+                          keyboardType: TextInputType.number,
                           data: 'project',
                           hintText: 'No of project',
                           labelText: 'No of project',
@@ -442,7 +338,7 @@ class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
                           height: 5.h,
                         ),
                         TaskCustomTextField(
-                          controller: regionalofficeController,
+                          controller: regionalOfficeController,
                           textCapitalization: TextCapitalization.none,
                           keyboardType: TextInputType.emailAddress,
                           data: 'office',
@@ -557,7 +453,7 @@ class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
                           height: 5.h,
                         ),
                         TaskCustomTextField(
-                          controller: referenceDetailsController,
+                          controller: refdetailsController,
                           textCapitalization: TextCapitalization.none,
                           keyboardType: TextInputType.emailAddress,
                           data: 'reference',
@@ -614,7 +510,7 @@ class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
                           height: 5.h,
                         ),
                         TaskCustomTextField(
-                          controller: descriptionController,
+                          controller: descrioptionController,
                           textCapitalization: TextCapitalization.sentences,
                           data: description,
                           hintText: description,
@@ -626,112 +522,18 @@ class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
                           height: 10.h,
                         ),
                         Text(
-                          "Address Type",
-                          style: TextStyle(fontSize: 14.sp),
-                        ),
-                        SizedBox(
-                          height: 5.h,
-                        ),
-                        Obx(
-                          () => DropdownButtonHideUnderline(
-                            child: DropdownButton2<String>(
-                              isExpanded: true,
-                              items: leadController.addressTypeList
-                                  .map((String item) {
-                                return DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(
-                                    item,
-                                    style: TextStyle(
-                                      decoration: TextDecoration.none,
-                                      fontFamily: 'Roboto',
-                                      color: darkGreyColor,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                );
-                              }).toList(),
-                              value: leadController
-                                      .selectedAddressType.value.isEmpty
-                                  ? null
-                                  : leadController.selectedAddressType.value,
-                              onChanged: (String? value) {
-                                leadController.selectedAddressType.value =
-                                    value ?? '';
-                              },
-                              buttonStyleData: ButtonStyleData(
-                                height: 50,
-                                width: double.infinity,
-                                padding:
-                                    const EdgeInsets.only(left: 14, right: 14),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(14.r),
-                                  border: Border.all(color: lightBorderColor),
-                                  color: whiteColor,
-                                ),
-                              ),
-                              hint: Text(
-                                'Select Address type',
-                                style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontFamily: 'Roboto',
-                                  color: darkGreyColor,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 16,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              iconStyleData: IconStyleData(
-                                icon: Image.asset(
-                                  'assets/images/png/Vector 3.png',
-                                  color: secondaryColor,
-                                  height: 8.h,
-                                ),
-                                iconSize: 14,
-                                iconEnabledColor: lightGreyColor,
-                                iconDisabledColor: lightGreyColor,
-                              ),
-                              dropdownStyleData: DropdownStyleData(
-                                maxHeight: 200.h,
-                                width: 335.w,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(14.r),
-                                    color: whiteColor,
-                                    border:
-                                        Border.all(color: lightBorderColor)),
-                                offset: const Offset(0, 0),
-                                scrollbarTheme: ScrollbarThemeData(
-                                  radius: const Radius.circular(40),
-                                  thickness: WidgetStateProperty.all<double>(6),
-                                  thumbVisibility:
-                                      WidgetStateProperty.all<bool>(true),
-                                ),
-                              ),
-                              menuItemStyleData: const MenuItemStyleData(
-                                height: 40,
-                                padding: EdgeInsets.only(left: 14, right: 14),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Text(
-                          "Address 1",
+                          "Site Address",
                           style: TextStyle(fontSize: 14.sp),
                         ),
                         SizedBox(
                           height: 5.h,
                         ),
                         TaskCustomTextField(
-                          controller: address1Controller,
+                          controller: siteaddressController,
                           textCapitalization: TextCapitalization.sentences,
                           data: address,
-                          hintText: "Address 1",
-                          labelText: "Address 1",
+                          hintText: "Site Address",
+                          labelText: "Site Address",
                           index: 17,
                           focusedIndexNotifier: focusedIndexNotifier,
                         ),
@@ -739,18 +541,18 @@ class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
                           height: 10.h,
                         ),
                         Text(
-                          "Address 2",
+                          "Office Address",
                           style: TextStyle(fontSize: 14.sp),
                         ),
                         SizedBox(
                           height: 5.h,
                         ),
                         TaskCustomTextField(
-                          controller: address2Controller,
+                          controller: officeaddressController,
                           textCapitalization: TextCapitalization.sentences,
                           data: address,
-                          hintText: "Address 2",
-                          labelText: "Address 2",
+                          hintText: "Office Address",
+                          labelText: "Office Address",
                           index: 20,
                           focusedIndexNotifier: focusedIndexNotifier,
                         ),
@@ -772,138 +574,6 @@ class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
                           labelText: "City/Town",
                           index: 17,
                           focusedIndexNotifier: focusedIndexNotifier,
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Text(
-                          "Postal Code",
-                          style: TextStyle(fontSize: 14.sp),
-                        ),
-                        SizedBox(
-                          height: 5.h,
-                        ),
-                        TaskCustomTextField(
-                          controller: postalController,
-                          textCapitalization: TextCapitalization.sentences,
-                          data: 'Postal code',
-                          hintText: 'Postal code',
-                          labelText: 'Postal code',
-                          index: 18,
-                          focusedIndexNotifier: focusedIndexNotifier,
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Text(
-                          "Sector",
-                          style: TextStyle(fontSize: 14.sp),
-                        ),
-                        SizedBox(
-                          height: 5.h,
-                        ),
-                        TaskCustomTextField(
-                          controller: sectorController,
-                          textCapitalization: TextCapitalization.sentences,
-                          data: 'Sector',
-                          hintText: 'Sector',
-                          labelText: 'Sector',
-                          index: 18,
-                          focusedIndexNotifier: focusedIndexNotifier,
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                        Text(
-                          "Country",
-                          style: TextStyle(fontSize: 14.sp),
-                        ),
-                        SizedBox(
-                          height: 5.h,
-                        ),
-                        Obx(
-                          () => DropdownButtonHideUnderline(
-                            child: DropdownButton2<String>(
-                              isExpanded: true,
-                              items:
-                                  leadController.countryList.map((String item) {
-                                return DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(
-                                    item,
-                                    style: TextStyle(
-                                      decoration: TextDecoration.none,
-                                      fontFamily: 'Roboto',
-                                      color: darkGreyColor,
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 16,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                );
-                              }).toList(),
-                              value:
-                                  leadController.selectedCountry.value.isEmpty
-                                      ? null
-                                      : leadController.selectedCountry.value,
-                              onChanged: (String? value) {
-                                leadController.selectedCountry.value =
-                                    value ?? '';
-                              },
-                              buttonStyleData: ButtonStyleData(
-                                height: 50,
-                                width: double.infinity,
-                                padding:
-                                    const EdgeInsets.only(left: 14, right: 14),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(14.r),
-                                  border: Border.all(color: lightBorderColor),
-                                  color: whiteColor,
-                                ),
-                              ),
-                              hint: Text(
-                                'Select country',
-                                style: TextStyle(
-                                  decoration: TextDecoration.none,
-                                  fontFamily: 'Roboto',
-                                  color: darkGreyColor,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 16,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              iconStyleData: IconStyleData(
-                                icon: Image.asset(
-                                  'assets/images/png/Vector 3.png',
-                                  color: secondaryColor,
-                                  height: 8.h,
-                                ),
-                                iconSize: 14,
-                                iconEnabledColor: lightGreyColor,
-                                iconDisabledColor: lightGreyColor,
-                              ),
-                              dropdownStyleData: DropdownStyleData(
-                                maxHeight: 500.h,
-                                width: 335.w,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(14.r),
-                                    color: whiteColor,
-                                    border:
-                                        Border.all(color: lightBorderColor)),
-                                offset: const Offset(0, 0),
-                                scrollbarTheme: ScrollbarThemeData(
-                                  radius: const Radius.circular(40),
-                                  thickness: WidgetStateProperty.all<double>(6),
-                                  thumbVisibility:
-                                      WidgetStateProperty.all<bool>(true),
-                                ),
-                              ),
-                              menuItemStyleData: const MenuItemStyleData(
-                                height: 40,
-                                padding: EdgeInsets.only(left: 14, right: 14),
-                              ),
-                            ),
-                          ),
                         ),
                         SizedBox(
                           height: 10.h,
@@ -960,8 +630,7 @@ class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
                                               borderRadius:
                                                   BorderRadius.circular(12.r),
                                               child: Image.file(
-                                                leadController
-                                                    .pickedFile.value!,
+                                                leadController.pickedFile.value,
                                                 fit: BoxFit.cover,
                                                 width: double.infinity,
                                                 height: double.infinity,
@@ -1044,40 +713,28 @@ class _LeadDetailUpdateState extends State<LeadDetailUpdate> {
                                             .selectedLeadStatusData.value !=
                                         null) {
                                       await leadController.updateDetails(
-                                          name: leadNameController.text,
-                                          companyName:
-                                              companyNameController.text,
-                                          phone: phoneController.text,
-                                          email: emailController.text,
-                                          designation:
-                                              designationController.text,
-                                          gender: leadController
-                                              .selectedGender.value,
-                                          source: leadController
-                                              .selectedSourceListData.value,
-                                          status: leadController
-                                              .selectedLeadStatusData.value,
-                                          description:
-                                              descriptionController.text,
-                                          address: addressController.text,
-                                          noofproject:
-                                              noofprojectController.text,
-                                          regionalOffice:
-                                              regionalofficeController.text,
-                                          referenceDetails:
-                                              referenceDetailsController.text,
-                                          type: leadController
-                                              .selectedUserType.value,
-                                          address1: address1Controller.text,
-                                          address2: address2Controller.text,
-                                          addressType: leadController
-                                              .selectedAddressType.value,
-                                          city: cityController.text,
-                                          postalCode: postalController.text,
-                                          sector: sectorController.text,
-                                          country: leadController
-                                              .selectedCountry.value,
-                                          id: widget.leadId);
+                                        name: leadNameController.text,
+                                        companyName: companyNameController.text,
+                                        phone: phoneController.text,
+                                        email: emailController.text,
+                                        designation: designationController.text,
+                                        source: leadController
+                                            .selectedSourceListData.value,
+                                        noofProject: noofprojectController.text,
+                                        regionalOffice:
+                                            regionalOfficeController.text,
+                                        status: leadController
+                                            .selectedLeadStatusData.value,
+                                        refDetails: refdetailsController.text,
+                                        type: leadController
+                                            .selectedUserType.value,
+                                        descriptin: descrioptionController.text,
+                                        siteAddress: siteaddressController.text,
+                                        officeAddress:
+                                            officeaddressController.text,
+                                        city: cityController.text,
+                                        leadId: widget.leadId,
+                                      );
                                     } else {
                                       CustomToast().showCustomToast(
                                           "Please select status data.");

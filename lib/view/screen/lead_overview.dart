@@ -545,30 +545,6 @@ class _LeadOverviewScreenState extends State<LeadOverviewScreen>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // GestureDetector(
-                      //   onTap: () {Get.to(()=>);},
-                      //   child: Container(
-                      //     height: 60.h,
-                      //     width: 80.w,
-                      //     decoration: BoxDecoration(
-                      //       borderRadius: BorderRadius.all(
-                      //         Radius.circular(5.r),
-                      //       ),
-                      //     ),
-                      //     child: ClipRRect(
-                      //       borderRadius: BorderRadius.all(
-                      //         Radius.circular(5.r),
-                      //       ),
-                      //       child: Image.network(
-                      //         "${leadDataValue?.image ?? ""}",
-                      //         fit: BoxFit.cover,
-                      //         errorBuilder: (context, error, stackTrace) {
-                      //           return Container();
-                      //         },
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
                       NetworkImageWidget(
                           imageurl: leadDataValue?.image ?? "",
                           height: 60.h,

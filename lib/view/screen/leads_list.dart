@@ -890,7 +890,10 @@ class _LeadListState extends State<LeadList> {
                                                         leadId: leadController
                                                             .leadsListData[
                                                                 index]
-                                                            .id));
+                                                            .id,
+                                                        leadDetails: leadController
+                                                                .leadsListData[
+                                                            index]));
                                                   },
                                                   child: Container(
                                                     child: Padding(

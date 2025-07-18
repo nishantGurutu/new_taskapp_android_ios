@@ -278,25 +278,6 @@ class _UpdateLeadsState extends State<UpdateLeads> {
                         SizedBox(
                           height: 10.h,
                         ),
-                        // Text(
-                        //   "Industry",
-                        //   style: TextStyle(fontSize: 14.sp),
-                        // ),
-                        // SizedBox(
-                        //   height: 5.h,
-                        // ),
-                        // TaskCustomTextField(
-                        //   controller: industryController,
-                        //   textCapitalization: TextCapitalization.sentences,
-                        //   data: industry,
-                        //   hintText: industry,
-                        //   labelText: industry,
-                        //   index: 4,
-                        //   focusedIndexNotifier: focusedIndexNotifier,
-                        // ),
-                        // SizedBox(
-                        //   height: 10.h,
-                        // ),
                         Text(
                           "Status",
                           style: TextStyle(fontSize: 14.sp),

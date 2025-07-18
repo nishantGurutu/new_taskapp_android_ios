@@ -35,6 +35,7 @@ import 'package:task_management/view/screen/add_lead.dart';
 import 'package:task_management/view/screen/all_followups.dart';
 import 'package:task_management/view/screen/attendence/checkin_screen.dart';
 import 'package:task_management/view/screen/bootom_bar.dart';
+import 'package:task_management/view/screen/follow_ups.dart';
 import 'package:task_management/view/screen/leads_list.dart';
 import 'package:task_management/view/screen/meeting/get_meeting.dart'
     show GetMeetingList;
@@ -297,13 +298,29 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       floatingActionButton: FloatingActionBubble(
         items: <Bubble>[
           Bubble(
-            title: "Add Meeting",
+            title: "Add Visit/Meeting",
             iconColor: Colors.white,
             bubbleColor: primaryColor,
             icon: Icons.add,
             titleStyle: TextStyle(fontSize: 16, color: Colors.white),
             onPress: () {
               Get.to(() => CheckinScreen());
+              _animationController.reverse();
+            },
+          ),
+          Bubble(
+            title: "Add Followup",
+            iconColor: Colors.white,
+            bubbleColor: primaryColor,
+            icon: Icons.add,
+            titleStyle: TextStyle(fontSize: 16, color: Colors.white),
+            onPress: () {
+              Get.to(
+                () => FollowUpsScreen(
+                  leadId: '',
+                  phoneNumber: '',
+                ),
+              );
               _animationController.reverse();
             },
           ),

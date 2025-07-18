@@ -656,30 +656,24 @@ class LeadService {
   }
 
   Future<bool> updateLeadDetails(
-      Rx<File> pickedFile,
-      Rx<File> pickedVisitingFile,
       String name,
       String companyName,
       String phone,
       String email,
       String designation,
-      String gender,
       SourceListData? source,
-      LeadStatusData? status,
-      String description,
-      String address,
-      String noofproject,
+      String noofProject,
       String regionalOffice,
-      String referenceDetails,
+      LeadStatusData? status,
+      String refDetails,
       String type,
-      String address1,
-      String address2,
-      String addressType,
+      String descriptin,
+      String siteAddress,
+      String officeAddress,
       String city,
-      String postalCode,
-      String sector,
-      String country,
-      id) async {
+      File visitFile,
+      File pickedFile,
+      leadId) async {
     try {
       final token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
@@ -704,35 +698,35 @@ class LeadService {
         'latitude': '${LocationHandler.currentPosition?.latitude}'.toString(),
         'longitude': '${LocationHandler.currentPosition?.longitude}'.toString(),
         'designation': designation.toString(),
-        'gender': gender.toString(),
-        'no_of_project': noofproject.toString(),
+        // 'gender': gender.toString(),
+        'no_of_project': noofProject.toString(),
         'regional_ofc': regionalOffice.toString(),
-        'reference_details': referenceDetails.toString(),
+        'reference_details': refDetails.toString(),
         'type': type.toString(),
-        'address_type': addressType.toString(),
-        'address_line1': address1.toString(),
-        'address_line2': address2.toString(),
+        // 'address_type': addressType.toString(),
+        'address_line1': siteAddress.toString(),
+        'address_line2': officeAddress.toString(),
         'city_town': city.toString(),
-        'postal_code': postalCode.toString(),
-        'sector_locality': sector.toString(),
-        'country': country.toString(),
-        'state': state.toString(),
-        'id': id.toString(),
-        'assigned_to': id.toString(),
-        'people_added': id.toString(),
+        // 'postal_code': postalCode.toString(),
+        // 'sector_locality': sector.toString(),
+        // 'country': country.toString(),
+        // 'state': state.toString(),
+        'id': leadId.toString(),
+        // 'assigned_to': id.toString(),
+        // 'people_added': id.toString(),
       };
 
-      if (pickedFile.value.path.isNotEmpty) {
-        final fileName = pickedFile.value.path.split('/').last;
+      if (pickedFile.path.isNotEmpty) {
+        final fileName = pickedFile.path.split('/').last;
         formDataMap['image'] = await MultipartFile.fromFile(
-          pickedFile.value.path,
+          pickedFile.path,
           filename: fileName,
         );
       }
-      if (pickedVisitingFile.value.path.isNotEmpty) {
-        final fileName = pickedVisitingFile.value.path.split('/').last;
+      if (visitFile.path.isNotEmpty) {
+        final fileName = visitFile.path.split('/').last;
         formDataMap['visiting_card'] = await MultipartFile.fromFile(
-          pickedVisitingFile.value.path,
+          visitFile.path,
           filename: fileName,
         );
       }
@@ -1456,6 +1450,10 @@ class LeadService {
         'note': note,
         'status': status.toString(),
       };
+
+      if (leadId.toString() == "null" || leadId.toString().isNotEmpty) {
+        formDataMap['lead_id'] = leadId;
+      }
 
       final formData = FormData.fromMap(formDataMap);
 
