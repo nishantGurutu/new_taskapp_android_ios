@@ -16,25 +16,30 @@ class DatabaseHelper {
   Future<Database> initDatabase() async {
     String path = join(await getDatabasesPath(), 'taskManagement.db');
     return await openDatabase(path,
-        version: 4, onCreate: _createDb, onUpgrade: _onUpgrade);
+        version: 5, onCreate: _createDb, onUpgrade: _onUpgrade);
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 3) {
-      await db.execute('ALTER TABLE area ADD COLUMN count INTEGER');
-    }
-    if (oldVersion < 4) {
+    if (oldVersion < 5) {
       await db.execute('''
-        CREATE TABLE locations (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          employee_id TEXT,
-          latitude REAL,
-          longitude REAL,
-          timestamp TEXT,
-          accuracy REAL,
-          altitude REAL,
-          speed REAL
-        )
+        CREATE TABLE leads (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        lead_name TEXT,
+        company_name TEXT,
+        phone TEXT,
+        email TEXT,
+        source TEXT,
+        industry TEXT,
+        status TEXT,
+        tag TEXT,
+        description TEXT,
+        address TEXT,
+        latitude REAL,
+        longitude REAL,
+        image_path TEXT,
+        audio_path TEXT,
+        timestamp TEXT
+      )
       ''');
     }
   }
@@ -42,6 +47,7 @@ class DatabaseHelper {
   Future<void> _createDb(Database db, int version) async {
     await db.execute('DROP TABLE IF EXISTS responsiblePerson');
     await db.execute('DROP TABLE IF EXISTS locations');
+    await db.execute('DROP TABLE IF EXISTS leads');
 
     await db.execute('''
       CREATE TABLE responsiblePerson (
@@ -130,6 +136,108 @@ class DatabaseHelper {
         speed REAL
       )
     ''');
+
+    await db.execute('''
+      CREATE TABLE leads (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        lead_name TEXT,
+        company_name TEXT,
+        phone TEXT,
+        email TEXT,
+        source TEXT,
+        industry TEXT,
+        status TEXT,
+        tag TEXT,
+        description TEXT,
+        address TEXT,
+        latitude REAL,
+        longitude REAL,
+        image_path TEXT,
+        audio_path TEXT,
+        timestamp TEXT
+      )
+    ''');
+  }
+
+  Future<void> insertLead({
+    required String leadName,
+    required String companyName,
+    required String phone,
+    required String email,
+    required String source,
+    required String industry,
+    required String status,
+    required String tag,
+    required String description,
+    required String address,
+    required String imagePath,
+    required String audioPath,
+    required double? latitude,
+    required double? longitude,
+    required String timestamp,
+  }) async {
+    final db = await database;
+
+    // Print input data for debugging
+    print('Inserting lead with the following data:');
+    print('Lead Name: $leadName');
+    print('Company Name: $companyName');
+    print('Phone: $phone');
+    print('Email: $email');
+    print('Source: $source');
+    print('Industry: $industry');
+    print('Status: $status');
+    print('Tag: $tag');
+    print('Description: $description');
+    print('Address: $address');
+    print('Image Path: $imagePath');
+    print('Audio Path: $audioPath');
+    print('Latitude: $latitude');
+    print('Longitude: $longitude');
+    print('Timestamp: $timestamp');
+
+    // Insert the lead data
+    await db.insert(
+      'leads',
+      {
+        'lead_name': leadName,
+        'company_name': companyName,
+        'phone': phone,
+        'email': email,
+        'source': source,
+        'industry': industry,
+        'status': status,
+        'tag': tag,
+        'description': description,
+        'address': address,
+        'latitude': latitude,
+        'longitude': longitude,
+        'image_path': imagePath,
+        'audio_path': audioPath,
+        'timestamp': timestamp,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+
+    // Verify insertion by querying the newly inserted lead
+    final insertedLeads = await db.query(
+      'leads',
+      where: 'timestamp = ?',
+      whereArgs: [timestamp],
+    );
+
+    if (insertedLeads.isNotEmpty) {
+      print('Lead successfully inserted:');
+      print(insertedLeads.first);
+    } else {
+      print('Failed to find the inserted lead in the database.');
+    }
+  }
+
+  // Method to get all leads
+  Future<List<Map<String, dynamic>>> getLeads() async {
+    final db = await database;
+    return await db.query('leads', orderBy: 'timestamp DESC');
   }
 
   // Method to insert a location
