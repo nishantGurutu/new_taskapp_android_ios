@@ -340,8 +340,6 @@ class _LeadDiscussionListState extends State<LeadDiscussionList> {
                               VoiceRecorderButton(
                                 onRecordingComplete: (File audioFile) async {
                                   attachment = audioFile;
-                                  print(
-                                      'recorded audio file in lead discussion ${attachment.path}');
                                 },
                               ),
                               SizedBox(width: 8.w),

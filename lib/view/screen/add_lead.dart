@@ -12,6 +12,7 @@ import 'package:task_management/custom_widget/button_widget.dart';
 import 'package:task_management/custom_widget/task_text_field.dart';
 import 'package:task_management/model/lead_status_lead.dart';
 import 'package:task_management/model/source_list_model.dart';
+import 'package:task_management/view/widgets/voiceRecorderButton.dart';
 
 class AddLeads extends StatefulWidget {
   const AddLeads({super.key});
@@ -415,40 +416,50 @@ class _AddLeadsState extends State<AddLeads> {
                         SizedBox(
                           height: 5.h,
                         ),
-                        InkWell(
-                          onTap: () {
-                            takePhoto(ImageSource.camera);
-                          },
-                          child: Container(
-                            height: 40.h,
-                            width: 130.w,
-                            decoration: BoxDecoration(
-                              color: secondaryColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.r),
+                        Row(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                takePhoto(ImageSource.camera);
+                              },
+                              child: Container(
+                                height: 40.h,
+                                width: 130.w,
+                                decoration: BoxDecoration(
+                                  color: secondaryColor,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10.r),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.camera,
+                                      color: whiteColor,
+                                    ),
+                                    SizedBox(
+                                      width: 8.w,
+                                    ),
+                                    Text(
+                                      'Camera',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        color: whiteColor,
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.camera,
-                                  color: whiteColor,
-                                ),
-                                SizedBox(
-                                  width: 8.w,
-                                ),
-                                Text(
-                                  'Camera',
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                    color: whiteColor,
-                                  ),
-                                )
-                              ],
+                            Spacer(),
+                            VoiceRecorderButton(
+                              onRecordingComplete: (File audioFile) async {
+                                attachment = audioFile;
+                              },
                             ),
-                          ),
+                          ],
                         ),
                         SizedBox(
                           height: 10.h,
@@ -466,27 +477,33 @@ class _AddLeadsState extends State<AddLeads> {
                                             .addselectedLeadStatusData.value !=
                                         null) {
                                       leadController.addLeads(
-                                        leadName: leadNameController.text,
-                                        companyName: companyNameController.text,
-                                        phone: phoneController.text,
-                                        email: emailController.text,
-                                        source: leadController
-                                                .selectedSourceListData
-                                                .value
-                                                ?.id
-                                                ?.toString() ??
-                                            '',
-                                        industry: industryController.text,
-                                        status: leadController
-                                                .addselectedLeadStatusData
-                                                .value
-                                                ?.id
-                                                .toString() ??
-                                            "",
-                                        tag: tagController.text,
-                                        description: descriptionController.text,
-                                        address: addressController.text,
-                                      );
+                                          leadName: leadNameController.text,
+                                          companyName:
+                                              companyNameController.text,
+                                          phone: phoneController.text,
+                                          email: emailController.text,
+                                          source: leadController
+                                                  .selectedSourceListData
+                                                  .value
+                                                  ?.id
+                                                  ?.toString() ??
+                                              '',
+                                          industry: industryController.text,
+                                          status: leadController
+                                                  .addselectedLeadStatusData
+                                                  .value
+                                                  ?.id
+                                                  .toString() ??
+                                              "",
+                                          tag: tagController.text,
+                                          description:
+                                              descriptionController.text,
+                                          address: addressController.text,
+                                          audio: attachment);
+                                      attachment = File('');
+                                      leadController.pickedFile.value =
+                                          File('');
+                                      leadController.pickedImage.value = '';
                                     } else {
                                       CustomToast().showCustomToast(
                                           "Please select status data.");
@@ -540,6 +557,7 @@ class _AddLeadsState extends State<AddLeads> {
     );
   }
 
+  File attachment = File('');
   final ImagePicker imagePicker = ImagePicker();
   Future<void> takePhoto(ImageSource source) async {
     try {

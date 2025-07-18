@@ -42,6 +42,7 @@ class LeadService {
     required String description,
     required String address,
     required Rx<File> pickedFile,
+    required File audio,
   }) async {
     try {
       final token = StorageHelper.getToken();
@@ -75,6 +76,19 @@ class LeadService {
         formDataMap['image'] = await MultipartFile.fromFile(
           pickedFile.value.path,
           filename: fileName,
+        );
+      }
+      print('akjhdu diuj8yu8 ijd3h8uy83 i3j89 ${audio.path}');
+      if (audio.path.isNotEmpty) {
+        final filePath = audio.path;
+        final fileName = filePath.split('/').last;
+
+        final mimeType = lookupMimeType(filePath) ?? 'application/octet-stream';
+
+        formDataMap['audio'] = await MultipartFile.fromFile(
+          filePath,
+          filename: fileName,
+          contentType: MediaType.parse(mimeType),
         );
       }
 

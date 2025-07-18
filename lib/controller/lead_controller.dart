@@ -254,7 +254,8 @@ class LeadController extends GetxController {
       required String status,
       required String tag,
       required String description,
-      required String address}) async {
+      required String address,
+      required File audio}) async {
     isLeadAdding.value = true;
     final result = await LeadService().addLeadsApi(
         leadName: leadName,
@@ -267,7 +268,8 @@ class LeadController extends GetxController {
         tag: tag,
         description: description,
         address: address,
-        pickedFile: pickedFile);
+        pickedFile: pickedFile,
+        audio: audio);
     if (result != null) {
       Get.back();
       await leadsList(selectedLeadStatusData.value?.id);
