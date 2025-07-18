@@ -42,6 +42,7 @@ class LeadDetailsData {
   dynamic regionalOfc;
   dynamic referenceDetails;
   String? image;
+  String? audio;
   dynamic type;
   dynamic addressType;
   dynamic addressLine1;
@@ -64,7 +65,6 @@ class LeadDetailsData {
   String? ownerName;
   List<AssignedToUsers>? assignedToUsers;
   List<AssignedToUsers>? addedUsers;
-  List<FollowUps>? followUps;
 
   LeadDetailsData(
       {this.id,
@@ -84,6 +84,7 @@ class LeadDetailsData {
       this.regionalOfc,
       this.referenceDetails,
       this.image,
+      this.audio,
       this.type,
       this.addressType,
       this.addressLine1,
@@ -105,8 +106,7 @@ class LeadDetailsData {
       this.statusName,
       this.ownerName,
       this.assignedToUsers,
-      this.addedUsers,
-      this.followUps});
+      this.addedUsers});
 
   LeadDetailsData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -126,6 +126,7 @@ class LeadDetailsData {
     regionalOfc = json['regional_ofc'];
     referenceDetails = json['reference_details'];
     image = json['image'];
+    audio = json['audio'];
     type = json['type'];
     addressType = json['address_type'];
     addressLine1 = json['address_line1'];
@@ -158,12 +159,6 @@ class LeadDetailsData {
         addedUsers!.add(new AssignedToUsers.fromJson(v));
       });
     }
-    if (json['follow_ups'] != null) {
-      followUps = <FollowUps>[];
-      json['follow_ups'].forEach((v) {
-        followUps!.add(new FollowUps.fromJson(v));
-      });
-    }
   }
 
   Map<String, dynamic> toJson() {
@@ -185,6 +180,7 @@ class LeadDetailsData {
     data['regional_ofc'] = this.regionalOfc;
     data['reference_details'] = this.referenceDetails;
     data['image'] = this.image;
+    data['audio'] = this.audio;
     data['type'] = this.type;
     data['address_type'] = this.addressType;
     data['address_line1'] = this.addressLine1;
@@ -212,9 +208,6 @@ class LeadDetailsData {
     if (this.addedUsers != null) {
       data['addedUsers'] = this.addedUsers!.map((v) => v.toJson()).toList();
     }
-    if (this.followUps != null) {
-      data['follow_ups'] = this.followUps!.map((v) => v.toJson()).toList();
-    }
     return data;
   }
 }
@@ -237,67 +230,6 @@ class AssignedToUsers {
     data['id'] = this.id;
     data['name'] = this.name;
     data['image'] = this.image;
-    return data;
-  }
-}
-
-class FollowUps {
-  int? id;
-  int? userId;
-  int? leadId;
-  int? followUpType;
-  String? followUpDate;
-  String? followUpTime;
-  String? note;
-  String? remarks;
-  dynamic reminder;
-  int? status;
-  String? createdAt;
-  String? updatedAt;
-
-  FollowUps(
-      {this.id,
-      this.userId,
-      this.leadId,
-      this.followUpType,
-      this.followUpDate,
-      this.followUpTime,
-      this.note,
-      this.remarks,
-      this.reminder,
-      this.status,
-      this.createdAt,
-      this.updatedAt});
-
-  FollowUps.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    userId = json['user_id'];
-    leadId = json['lead_id'];
-    followUpType = json['follow_up_type'];
-    followUpDate = json['follow_up_date'];
-    followUpTime = json['follow_up_time'];
-    note = json['note'];
-    remarks = json['remarks'];
-    reminder = json['reminder'];
-    status = json['status'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['user_id'] = this.userId;
-    data['lead_id'] = this.leadId;
-    data['follow_up_type'] = this.followUpType;
-    data['follow_up_date'] = this.followUpDate;
-    data['follow_up_time'] = this.followUpTime;
-    data['note'] = this.note;
-    data['remarks'] = this.remarks;
-    data['reminder'] = this.reminder;
-    data['status'] = this.status;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
     return data;
   }
 }

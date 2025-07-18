@@ -16,6 +16,7 @@ import 'package:task_management/view/screen/quotation_list.dart';
 import 'package:task_management/view/widgets/add_assign_user.dart';
 import 'package:task_management/view/widgets/add_lead_contact.dart';
 import 'package:task_management/view/widgets/assign_user.dart';
+import 'package:task_management/view/widgets/customAudioPlayer.dart';
 import 'package:task_management/view/widgets/followup_list.dart';
 import 'package:task_management/view/widgets/lead_discussion_list.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -535,6 +536,41 @@ class _LeadOverviewScreenState extends State<LeadOverviewScreen>
                     ),
                   ],
                 ),
+                if ((leadDataValue?.image ?? "").isNotEmpty ||
+                    (leadDataValue?.audio ?? "").isNotEmpty)
+                  SizedBox(height: 10.h),
+                if ((leadDataValue?.image ?? "").isNotEmpty ||
+                    (leadDataValue?.audio ?? "").isNotEmpty)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        height: 60.h,
+                        width: 80.w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5.r),
+                          ),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(5.r),
+                          ),
+                          child: Image.network(
+                            "${leadDataValue?.image ?? ""}",
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container();
+                            },
+                          ),
+                        ),
+                      ),
+                      CustomAudioPlayer(
+                        audioUrl: leadDataValue!.audio!,
+                        chatId: '',
+                      )
+                    ],
+                  ),
                 SizedBox(height: 10.h),
                 Row(
                   children: [

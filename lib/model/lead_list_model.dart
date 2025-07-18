@@ -37,26 +37,29 @@ class LeadListData {
   String? phone;
   String? email;
   int? source;
-  String? designation;
-  String? gender;
+  dynamic designation;
+  dynamic gender;
   int? status;
-  String? noOfProject;
+  dynamic noOfProject;
   String? description;
-  String? regionalOfc;
-  String? referenceDetails;
+  dynamic regionalOfc;
+  dynamic referenceDetails;
   String? image;
-  String? type;
-  String? addressType;
-  String? addressLine1;
-  String? addressLine2;
-  String? cityTown;
-  String? postalCode;
-  String? sectorLocality;
-  String? country;
-  String? state;
-  String? visitingCard;
+  String? audio;
+  dynamic type;
+  dynamic addressType;
+  dynamic addressLine1;
+  dynamic addressLine2;
+  dynamic cityTown;
+  dynamic postalCode;
+  dynamic sectorLocality;
+  dynamic country;
+  dynamic state;
+  dynamic visitingCard;
   String? latitude;
   String? longitude;
+  String? peopleAdded;
+  String? assignedTo;
   int? isDeleted;
   String? createdAt;
   String? updatedAt;
@@ -82,6 +85,7 @@ class LeadListData {
       this.regionalOfc,
       this.referenceDetails,
       this.image,
+      this.audio,
       this.type,
       this.addressType,
       this.addressLine1,
@@ -94,6 +98,8 @@ class LeadListData {
       this.visitingCard,
       this.latitude,
       this.longitude,
+      this.peopleAdded,
+      this.assignedTo,
       this.isDeleted,
       this.createdAt,
       this.updatedAt,
@@ -119,6 +125,7 @@ class LeadListData {
     regionalOfc = json['regional_ofc'];
     referenceDetails = json['reference_details'];
     image = json['image'];
+    audio = json['audio'];
     type = json['type'];
     addressType = json['address_type'];
     addressLine1 = json['address_line1'];
@@ -131,6 +138,8 @@ class LeadListData {
     visitingCard = json['visiting_card'];
     latitude = json['latitude'];
     longitude = json['longitude'];
+    peopleAdded = json['people_added'];
+    assignedTo = json['assigned_to'];
     isDeleted = json['is_deleted'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -158,6 +167,7 @@ class LeadListData {
     data['regional_ofc'] = this.regionalOfc;
     data['reference_details'] = this.referenceDetails;
     data['image'] = this.image;
+    data['audio'] = this.audio;
     data['type'] = this.type;
     data['address_type'] = this.addressType;
     data['address_line1'] = this.addressLine1;
@@ -170,6 +180,8 @@ class LeadListData {
     data['visiting_card'] = this.visitingCard;
     data['latitude'] = this.latitude;
     data['longitude'] = this.longitude;
+    data['people_added'] = this.peopleAdded;
+    data['assigned_to'] = this.assignedTo;
     data['is_deleted'] = this.isDeleted;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
