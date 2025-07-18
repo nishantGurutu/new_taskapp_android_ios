@@ -698,22 +698,14 @@ class LeadService {
         'latitude': '${LocationHandler.currentPosition?.latitude}'.toString(),
         'longitude': '${LocationHandler.currentPosition?.longitude}'.toString(),
         'designation': designation.toString(),
-        // 'gender': gender.toString(),
         'no_of_project': noofProject.toString(),
         'regional_ofc': regionalOffice.toString(),
         'reference_details': refDetails.toString(),
         'type': type.toString(),
-        // 'address_type': addressType.toString(),
         'address_line1': siteAddress.toString(),
         'address_line2': officeAddress.toString(),
         'city_town': city.toString(),
-        // 'postal_code': postalCode.toString(),
-        // 'sector_locality': sector.toString(),
-        // 'country': country.toString(),
-        // 'state': state.toString(),
         'id': leadId.toString(),
-        // 'assigned_to': id.toString(),
-        // 'people_added': id.toString(),
       };
 
       if (pickedFile.path.isNotEmpty) {
