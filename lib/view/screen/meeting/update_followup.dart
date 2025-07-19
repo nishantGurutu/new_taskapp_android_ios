@@ -320,6 +320,8 @@ class _UpdateFollowUpsScreenState extends State<UpdateFollowUpsScreen> {
                 ),
                 CustomButton(
                   onPressed: () {
+                    String rem =
+                        "${timeTextEditingController.text} ${leadController.selectedTime?.value}";
                     if (_formKey.currentState!.validate()) {
                       leadController.addFollowup(
                         followupsType: leadController
@@ -331,6 +333,7 @@ class _UpdateFollowUpsScreenState extends State<UpdateFollowUpsScreen> {
                         note: noteController.text,
                         status: leadController.selectedLeadStatusData.value?.id,
                         leadId: widget.leadId,
+                        reminder: rem,
                       );
                     }
                   },

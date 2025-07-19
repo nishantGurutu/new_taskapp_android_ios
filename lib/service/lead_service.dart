@@ -105,23 +105,24 @@ class LeadService {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         // Save to database after successful API call
-        await DatabaseHelper.instance.insertLead(
-          leadName: leadName,
-          companyName: companyName,
-          phone: phone,
-          email: email,
-          source: source,
-          industry: industry,
-          status: status,
-          tag: tag,
-          description: description,
-          address: address,
-          imagePath: pickedFile.value.path,
-          audioPath: audio.path,
-          latitude: LocationHandler.currentPosition?.latitude,
-          longitude: LocationHandler.currentPosition?.longitude,
-          timestamp: DateTime.now().toIso8601String(),
-        );
+        await DatabaseHelper.instance.insertStatus(status: "online");
+        // await DatabaseHelper.instance.insertLead(
+        //   leadName: leadName,
+        //   companyName: companyName,
+        //   phone: phone,
+        //   email: email,
+        //   source: source,
+        //   industry: industry,
+        //   status: status,
+        //   tag: tag,
+        //   description: description,
+        //   address: address,
+        //   imagePath: pickedFile.value.path,
+        //   audioPath: audio.path,
+        //   latitude: LocationHandler.currentPosition?.latitude,
+        //   longitude: LocationHandler.currentPosition?.longitude,
+        //   timestamp: DateTime.now().toIso8601String(),
+        // );
         CustomToast().showCustomToast(response.data['message']);
         return true;
       } else if (response.statusCode == 400) {
@@ -694,7 +695,11 @@ class LeadService {
       String city,
       File visitFile,
       File pickedFile,
-      leadId) async {
+      leadId,
+      int? followupType,
+      String followupDate,
+      String followupTime,
+      String reminder) async {
     try {
       final token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
@@ -727,6 +732,10 @@ class LeadService {
         'address_line2': officeAddress.toString(),
         'city_town': city.toString(),
         'id': leadId.toString(),
+        'follow_up_date': followupDate.toString(),
+        'follow_up_time': followupTime.toString(),
+        'follow_up_type': followupType,
+        'reminder': reminder,
       };
 
       if (pickedFile.path.isNotEmpty) {
@@ -1441,8 +1450,14 @@ class LeadService {
     }
   }
 
-  Future<bool> addFollowup(String followupsType, String followupsDate,
-      String followupsTime, String note, int? status, dynamic leadId) async {
+  Future<bool> addFollowup(
+      String followupsType,
+      String followupsDate,
+      String followupsTime,
+      String note,
+      int? status,
+      dynamic leadId,
+      String reminder) async {
     try {
       final token = StorageHelper.getToken();
       _dio.options.headers["Authorization"] = "Bearer $token";
@@ -1461,6 +1476,7 @@ class LeadService {
         'follow_up_time': followupsTime,
         'note': note,
         'status': status.toString(),
+        'reminder': reminder,
       };
 
       if (leadId.toString() == "null" || leadId.toString().isNotEmpty) {

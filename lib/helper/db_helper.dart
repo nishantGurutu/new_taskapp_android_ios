@@ -22,23 +22,8 @@ class DatabaseHelper {
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 5) {
       await db.execute('''
-        CREATE TABLE leads (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        lead_name TEXT,
-        company_name TEXT,
-        phone TEXT,
-        email TEXT,
-        source TEXT,
-        industry TEXT,
-        status TEXT,
-        tag TEXT,
-        description TEXT,
-        address TEXT,
-        latitude REAL,
-        longitude REAL,
-        image_path TEXT,
-        audio_path TEXT,
-        timestamp TEXT
+        CREATE TABLE onlineStatus (
+        status TEXT
       )
       ''');
     }
@@ -48,6 +33,7 @@ class DatabaseHelper {
     await db.execute('DROP TABLE IF EXISTS responsiblePerson');
     await db.execute('DROP TABLE IF EXISTS locations');
     await db.execute('DROP TABLE IF EXISTS leads');
+    await db.execute('DROP TABLE IF EXISTS onlineStatus');
 
     await db.execute('''
       CREATE TABLE responsiblePerson (
@@ -157,6 +143,18 @@ class DatabaseHelper {
         timestamp TEXT
       )
     ''');
+    await db.execute('''
+      CREATE TABLE onlineStatus (
+        status TEXT
+      )
+    ''');
+  }
+
+  Future<void> insertStatus({required String status}) async {
+    final db = await database;
+    await db.insert("onlineStatus", {
+      'status': status,
+    });
   }
 
   Future<void> insertLead({
@@ -178,25 +176,6 @@ class DatabaseHelper {
   }) async {
     final db = await database;
 
-    // Print input data for debugging
-    print('Inserting lead with the following data:');
-    print('Lead Name: $leadName');
-    print('Company Name: $companyName');
-    print('Phone: $phone');
-    print('Email: $email');
-    print('Source: $source');
-    print('Industry: $industry');
-    print('Status: $status');
-    print('Tag: $tag');
-    print('Description: $description');
-    print('Address: $address');
-    print('Image Path: $imagePath');
-    print('Audio Path: $audioPath');
-    print('Latitude: $latitude');
-    print('Longitude: $longitude');
-    print('Timestamp: $timestamp');
-
-    // Insert the lead data
     await db.insert(
       'leads',
       {
@@ -219,7 +198,6 @@ class DatabaseHelper {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
 
-    // Verify insertion by querying the newly inserted lead
     final insertedLeads = await db.query(
       'leads',
       where: 'timestamp = ?',
@@ -234,13 +212,11 @@ class DatabaseHelper {
     }
   }
 
-  // Method to get all leads
   Future<List<Map<String, dynamic>>> getLeads() async {
     final db = await database;
     return await db.query('leads', orderBy: 'timestamp DESC');
   }
 
-  // Method to insert a location
   Future<void> insertLocation(
       String employeeId,
       double latitude,

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +11,7 @@ import 'package:task_management/constant/text_constant.dart';
 import 'package:task_management/controller/lead_controller.dart';
 import 'package:task_management/custom_widget/button_widget.dart';
 import 'package:task_management/custom_widget/task_text_field.dart';
+import 'package:task_management/helper/db_helper.dart';
 import 'package:task_management/model/lead_status_lead.dart';
 import 'package:task_management/model/source_list_model.dart';
 import 'package:task_management/view/widgets/voiceRecorderButton.dart';
@@ -33,6 +35,8 @@ class _AddLeadsState extends State<AddLeads> {
   final TextEditingController tagController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController timeController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   ValueNotifier<int?> focusedIndexNotifier = ValueNotifier<int?>(null);
 
@@ -406,9 +410,6 @@ class _AddLeadsState extends State<AddLeads> {
                         SizedBox(
                           height: 10.h,
                         ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
                         Text(
                           "Upload Selfie Image",
                           style: TextStyle(fontSize: 14.sp),
@@ -466,7 +467,7 @@ class _AddLeadsState extends State<AddLeads> {
                         ),
                         Obx(
                           () => CustomButton(
-                            onPressed: () {
+                            onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 if (leadController.isLeadAdding.value ==
                                     false) {
@@ -476,7 +477,14 @@ class _AddLeadsState extends State<AddLeads> {
                                     if (leadController
                                             .addselectedLeadStatusData.value !=
                                         null) {
-                                      leadController.addLeads(
+                                      final connectivityResult =
+                                          await Connectivity()
+                                              .checkConnectivity();
+                                      bool isConnected = connectivityResult !=
+                                          ConnectivityResult.none;
+
+                                      if (isConnected) {
+                                        leadController.addLeads(
                                           leadName: leadNameController.text,
                                           companyName:
                                               companyNameController.text,
@@ -499,7 +507,12 @@ class _AddLeadsState extends State<AddLeads> {
                                           description:
                                               descriptionController.text,
                                           address: addressController.text,
-                                          audio: attachment);
+                                          audio: attachment,
+                                        );
+                                      } else {
+                                        await DatabaseHelper.instance
+                                            .insertStatus(status: "offline");
+                                      }
                                       attachment = File('');
                                       leadController.pickedFile.value =
                                           File('');

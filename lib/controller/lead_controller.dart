@@ -244,32 +244,34 @@ class LeadController extends GetxController {
   var pickedVisitingFile = File('').obs;
 
   var isLeadAdding = false.obs;
-  Future<void> addLeads(
-      {required String leadName,
-      required String companyName,
-      required String phone,
-      required String email,
-      required String source,
-      required String industry,
-      required String status,
-      required String tag,
-      required String description,
-      required String address,
-      required File audio}) async {
+  Future<void> addLeads({
+    required String leadName,
+    required String companyName,
+    required String phone,
+    required String email,
+    required String source,
+    required String industry,
+    required String status,
+    required String tag,
+    required String description,
+    required String address,
+    required File audio,
+  }) async {
     isLeadAdding.value = true;
     final result = await LeadService().addLeadsApi(
-        leadName: leadName,
-        companyName: companyName,
-        phone: phone,
-        email: email,
-        source: source,
-        industry: industry,
-        status: status,
-        tag: tag,
-        description: description,
-        address: address,
-        pickedFile: pickedFile,
-        audio: audio);
+      leadName: leadName,
+      companyName: companyName,
+      phone: phone,
+      email: email,
+      source: source,
+      industry: industry,
+      status: status,
+      tag: tag,
+      description: description,
+      address: address,
+      pickedFile: pickedFile,
+      audio: audio,
+    );
     if (result != null) {
       Get.back();
       await leadsList(selectedLeadStatusData.value?.id);
@@ -572,27 +574,36 @@ class LeadController extends GetxController {
       required String siteAddress,
       required String officeAddress,
       required String city,
-      required leadId}) async {
+      required leadId,
+      int? followupType,
+      required String followupDate,
+      required String followupTime,
+      required String reminder}) async {
     isDetailsUpdating.value = true;
     final result = await LeadService().updateLeadDetails(
-        name,
-        companyName,
-        phone,
-        email,
-        designation,
-        source,
-        noofProject,
-        regionalOffice,
-        status,
-        refDetails,
-        type,
-        descriptin,
-        siteAddress,
-        officeAddress,
-        city,
-        pickedVisitingFile.value,
-        pickedFile.value,
-        leadId);
+      name,
+      companyName,
+      phone,
+      email,
+      designation,
+      source,
+      noofProject,
+      regionalOffice,
+      status,
+      refDetails,
+      type,
+      descriptin,
+      siteAddress,
+      officeAddress,
+      city,
+      pickedVisitingFile.value,
+      pickedFile.value,
+      leadId,
+      followupType,
+      followupDate,
+      followupTime,
+      reminder,
+    );
     if (result != null) {
       Get.back();
     } else {}
@@ -1113,10 +1124,11 @@ class LeadController extends GetxController {
     required dynamic note,
     int? status,
     dynamic? leadId,
+    required String reminder,
   }) async {
     isPeopleAdding.value = true;
-    final result = await LeadService().addFollowup(
-        followupsType, followupsDate, followupsTime, note, status, leadId);
+    final result = await LeadService().addFollowup(followupsType, followupsDate,
+        followupsTime, note, status, leadId, reminder);
     if (result != null) {
       Get.back();
       Get.back();
