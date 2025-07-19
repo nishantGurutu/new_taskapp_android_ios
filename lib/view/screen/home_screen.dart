@@ -550,14 +550,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     border: Border.all(color: boxBorderColor),
                     borderRadius: BorderRadius.all(Radius.circular(18.r)),
                     color: whiteColor,
-                    // gradient: LinearGradient(
-                    //   begin: Alignment.topCenter,
-                    //   end: Alignment.bottomCenter,
-                    //   colors: [
-                    //     dailyActivityBoxColor1,
-                    //     gradientSecondaryBoxColor2,
-                    //   ],
-                    // ),
                   ),
                   child: Padding(
                     padding:
@@ -612,14 +604,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     border: Border.all(color: boxBorderColor),
                     borderRadius: BorderRadius.all(Radius.circular(18.r)),
                     color: whiteColor,
-                    // gradient: LinearGradient(
-                    //   begin: Alignment.topCenter,
-                    //   end: Alignment.bottomCenter,
-                    //   colors: [
-                    //     dailyActivityBoxColor1,
-                    //     gradientSecondaryBoxColor2,
-                    //   ],
-                    // ),
                   ),
                   child: Padding(
                     padding:
@@ -682,14 +666,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     border: Border.all(color: boxBorderColor),
                     borderRadius: BorderRadius.all(Radius.circular(18.r)),
                     color: whiteColor,
-                    // gradient: LinearGradient(
-                    //   begin: Alignment.topCenter,
-                    //   end: Alignment.bottomCenter,
-                    //   colors: [
-                    //     dailyActivityBoxColor1,
-                    //     gradientSecondaryBoxColor2,
-                    //   ],
-                    // ),
                   ),
                   child: Padding(
                     padding:
@@ -754,14 +730,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     border: Border.all(color: boxBorderColor),
                     borderRadius: BorderRadius.all(Radius.circular(18.r)),
                     color: whiteColor,
-                    // gradient: LinearGradient(
-                    //   begin: Alignment.topCenter,
-                    //   end: Alignment.bottomCenter,
-                    //   colors: [
-                    //     dailyActivityBoxColor1,
-                    //     gradientSecondaryBoxColor2,
-                    //   ],
-                    // ),
                   ),
                   child: Padding(
                     padding:
@@ -913,14 +881,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         border: Border.all(color: boxBorderColor),
                         borderRadius: BorderRadius.all(Radius.circular(18.r)),
                         color: whiteColor,
-                        // gradient: LinearGradient(
-                        //   begin: Alignment.topCenter,
-                        //   end: Alignment.bottomCenter,
-                        //   colors: [
-                        //     totalTaskBoxColor1,
-                        //     gradientSecondaryBoxColor2,
-                        //   ],
-                        // ),
                       ),
                       padding:
                           EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
@@ -1018,14 +978,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         border: Border.all(color: boxBorderColor),
                         borderRadius: BorderRadius.all(Radius.circular(18.r)),
                         color: whiteColor,
-                        // gradient: LinearGradient(
-                        //   begin: Alignment.topCenter,
-                        //   end: Alignment.bottomCenter,
-                        //   colors: [
-                        //     totalTaskBoxColor1,
-                        //     gradientSecondaryBoxColor2,
-                        //   ],
-                        // ),
                       ),
                       padding:
                           EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
@@ -1081,14 +1033,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       border: Border.all(color: boxBorderColor),
                       borderRadius: BorderRadius.all(Radius.circular(18.r)),
                       color: whiteColor,
-                      // gradient: LinearGradient(
-                      //   begin: Alignment.topCenter,
-                      //   end: Alignment.bottomCenter,
-                      //   colors: [
-                      //     closedTaskBoxColor1,
-                      //     gradientSecondaryBoxColor2,
-                      //   ],
-                      // ),
                     ),
                     padding:
                         EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
@@ -1163,8 +1107,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     const Color.fromARGB(255, 76, 175, 175),
                     whiteColor,
                     whiteColor,
-                    // totalTaskBoxColor1,
-                    // gradientSecondaryBoxColor2,
                   ),
                 ),
               ),
