@@ -466,6 +466,61 @@ class _LeadListState extends State<LeadList> {
                                                           fontWeight:
                                                               FontWeight.w400),
                                                     ),
+                                                    Spacer(),
+                                                    (leadController
+                                                                    .leadsListData[
+                                                                        index]
+                                                                    .leadNumber ??
+                                                                "")
+                                                            .isEmpty
+                                                        ? Row(
+                                                            children: [
+                                                              Text('Offline'),
+                                                              SizedBox(
+                                                                width: 4.w,
+                                                              ),
+                                                              Container(
+                                                                height: 12.h,
+                                                                width: 12.w,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color:
+                                                                      redColor,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .all(
+                                                                    Radius
+                                                                        .circular(
+                                                                            6.r),
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          )
+                                                        : Row(
+                                                            children: [
+                                                              Text('Online'),
+                                                              SizedBox(
+                                                                width: 4.w,
+                                                              ),
+                                                              Container(
+                                                                height: 12.h,
+                                                                width: 12.w,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color:
+                                                                      greenColor,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .all(
+                                                                    Radius
+                                                                        .circular(
+                                                                            6.r),
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          )
                                                   ],
                                                 ),
                                               ),
