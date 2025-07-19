@@ -23,7 +23,6 @@ class _AutoScrollListState extends State<AutoScrollList> {
   void initState() {
     super.initState();
     _startAutoScroll();
-    // Precache images to improve loading performance
     WidgetsBinding.instance.addPostFrameCallback((_) {
       precacheImage(
           AssetImage('assets/images/png/birthday_creative_image.png'), context);
@@ -94,7 +93,6 @@ class _AutoScrollListState extends State<AutoScrollList> {
                   final id =
                       widget.anniversaryListData[index]['id']?.toString() ?? '';
 
-                  // Determine image path
                   final imagePath = eventType == 'birthday'
                       ? 'assets/images/png/birthday_creative_image.png'
                       : 'assets/images/png/Happy_Anniversary.png';
