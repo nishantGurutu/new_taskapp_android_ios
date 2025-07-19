@@ -29,10 +29,10 @@ class SourseListModel {
 
 class SourceListData {
   int? id;
-  String? sourceName;
-  int? status;
-  String? createdAt;
-  String? updatedAt;
+  dynamic sourceName;
+  dynamic status;
+  dynamic createdAt;
+  dynamic updatedAt;
 
   SourceListData(
       {this.id, this.sourceName, this.status, this.createdAt, this.updatedAt});

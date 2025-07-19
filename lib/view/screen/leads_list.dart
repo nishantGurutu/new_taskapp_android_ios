@@ -467,15 +467,18 @@ class _LeadListState extends State<LeadList> {
                                                               FontWeight.w400),
                                                     ),
                                                     Spacer(),
-                                                    (leadController
-                                                                    .leadsListData[
-                                                                        index]
-                                                                    .leadNumber ??
-                                                                "")
-                                                            .isEmpty
-                                                        ? Row(
+                                                    if ((leadController
+                                                                .leadsListData[
+                                                                    index]
+                                                                .leadNumber ??
+                                                            "")
+                                                        .isEmpty)
+                                                      InkWell(
+                                                        onTap: () {},
+                                                        child: Container(
+                                                          child: Row(
                                                             children: [
-                                                              Text('Offline'),
+                                                              Text('Async'),
                                                               SizedBox(
                                                                 width: 4.w,
                                                               ),
@@ -496,31 +499,9 @@ class _LeadListState extends State<LeadList> {
                                                                 ),
                                                               )
                                                             ],
-                                                          )
-                                                        : Row(
-                                                            children: [
-                                                              Text('Online'),
-                                                              SizedBox(
-                                                                width: 4.w,
-                                                              ),
-                                                              Container(
-                                                                height: 12.h,
-                                                                width: 12.w,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color:
-                                                                      greenColor,
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .all(
-                                                                    Radius
-                                                                        .circular(
-                                                                            6.r),
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            ],
-                                                          )
+                                                          ),
+                                                        ),
+                                                      )
                                                   ],
                                                 ),
                                               ),

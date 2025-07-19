@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:task_management/component/location_handler.dart';
 import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/custom_toast.dart';
 import 'package:task_management/constant/text_constant.dart';
@@ -46,8 +47,10 @@ class _AddLeadsState extends State<AddLeads> {
       leadController.selectedSourceListData.value = null;
       leadController.addselectedLeadStatusData.value = null;
       leadController.selectedLeadStatusData.value = null;
-      leadController.statusListApi(status: '');
-      leadController.sourceList(source: '');
+      leadController.offLineSourcedata();
+      leadController.offLineStatusdata();
+      // leadController.statusListApi(status: '');
+      // leadController.sourceList(source: '');
     });
     super.initState();
   }
@@ -511,7 +514,39 @@ class _AddLeadsState extends State<AddLeads> {
                                         );
                                       } else {
                                         await DatabaseHelper.instance
-                                            .insertStatus(status: "offline");
+                                            .insertLead(
+                                          leadName: leadNameController.text,
+                                          companyName:
+                                              companyNameController.text,
+                                          phone: phoneController.text,
+                                          email: emailController.text,
+                                          source: leadController
+                                                  .selectedSourceListData
+                                                  .value
+                                                  ?.id
+                                                  ?.toString() ??
+                                              '',
+                                          industry: industryController.text,
+                                          status: leadController
+                                                  .addselectedLeadStatusData
+                                                  .value
+                                                  ?.id
+                                                  ?.toString() ??
+                                              '',
+                                          tag: tagController.text,
+                                          description:
+                                              descriptionController.text,
+                                          address: addressController.text,
+                                          imagePath: leadController
+                                              .pickedFile.value.path,
+                                          audioPath: attachment.path,
+                                          latitude: LocationHandler
+                                              .currentPosition?.latitude,
+                                          longitude: LocationHandler
+                                              .currentPosition?.longitude,
+                                          timestamp:
+                                              DateTime.now().toIso8601String(),
+                                        );
                                       }
                                       attachment = File('');
                                       leadController.pickedFile.value =

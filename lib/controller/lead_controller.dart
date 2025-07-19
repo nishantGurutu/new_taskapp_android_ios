@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:task_management/constant/custom_toast.dart';
 import 'package:task_management/data/model/visit_type_list.dart';
 import 'package:task_management/firebase_messaging/notification_service.dart';
+import 'package:task_management/helper/db_helper.dart';
 import 'package:task_management/helper/storage_helper.dart';
 import 'package:task_management/model/LeadNoteModel.dart';
 import 'package:task_management/model/follow_ups_list_model.dart';
@@ -320,7 +321,17 @@ class LeadController extends GetxController {
     isLeadLoading.value = true;
     final result = await LeadService().leadsListApi(id);
     if (result != null) {
+      final offlineLeads = await DatabaseHelper.instance.getLeads();
+      leadsListData.addAll(
+        offlineLeads.map((e) => LeadListData.fromJson(e)).toList(),
+      );
       leadsListData.assignAll(result.data!.reversed.toList());
+
+      print("offline db data getting ${leadsListData.length}");
+      print("offline db data getting 2 ${offlineLeads}");
+      print("offline db data getting 3 ${offlineLeads.length}");
+
+      print("offline db data getting 4 ${leadsListData.length}");
       selectedStatusPerLead.addAll(
           List<LeadStatusData>.filled(leadsListData.length, LeadStatusData()));
       for (int i = 0; i < leadsListData.length; i++) {
@@ -344,6 +355,10 @@ class LeadController extends GetxController {
     final result = await LeadService().sourseList();
     if (result != null) {
       sourceListData.assignAll(result.data!);
+
+      for (var val in result.data!) {
+        await DatabaseHelper.instance.insertLeadSource(val);
+      }
       if (source != null) {
         for (var val in sourceListData) {
           if (val.id.toString() == source.toString())
@@ -353,6 +368,24 @@ class LeadController extends GetxController {
     } else {}
     isSourceLoading.value = false;
   }
+
+  Future<void> offLineSourcedata() async {
+    final result = await DatabaseHelper.instance.getLeadSources();
+    sourceListData.assignAll(result);
+    refresh();
+  }
+
+  Future<void> offLineStatusdata() async {
+    final result = await DatabaseHelper.instance.getLeadStatus();
+    leadStatusData.assignAll(result);
+    print('kdje93 fiyr874 ${leadStatusData[0].name}');
+    refresh();
+  }
+  // Future<void> offLineSourcedata() async {
+  //   final result = await DatabaseHelper.instance.getLeadSources();
+  //   sourceListData.assignAll(result);
+  //   refresh();
+  // }
 
   var isStatusListLoading = false.obs;
 
@@ -367,6 +400,10 @@ class LeadController extends GetxController {
     final result = await LeadService().statusListApi();
     if (result != null) {
       leadStatusData.assignAll(result.data!);
+
+      for (var val in result.data!) {
+        await DatabaseHelper.instance.insertLeadStatus(val);
+      }
       if (status != null) {
         for (var val in leadStatusData) {
           if (val.id.toString() == status.toString() ||

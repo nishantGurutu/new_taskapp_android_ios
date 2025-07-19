@@ -29,23 +29,23 @@ class LeedListModel {
 
 class LeadListData {
   int? id;
-  String? leadNumber;
-  int? userId;
-  String? leadName;
-  String? leadType;
-  String? company;
-  String? phone;
-  String? email;
-  int? source;
+  dynamic leadNumber;
+  dynamic userId;
+  dynamic leadName;
+  dynamic leadType;
+  dynamic company;
+  dynamic phone;
+  dynamic email;
+  dynamic source;
   dynamic designation;
   dynamic gender;
-  int? status;
+  dynamic status;
   dynamic noOfProject;
-  String? description;
+  dynamic description;
   dynamic regionalOfc;
   dynamic referenceDetails;
-  String? image;
-  String? audio;
+  dynamic image;
+  dynamic audio;
   dynamic type;
   dynamic addressType;
   dynamic addressLine1;
@@ -56,16 +56,16 @@ class LeadListData {
   dynamic country;
   dynamic state;
   dynamic visitingCard;
-  String? latitude;
-  String? longitude;
-  String? peopleAdded;
-  String? assignedTo;
-  int? isDeleted;
-  String? createdAt;
-  String? updatedAt;
-  String? sourceName;
-  String? statusName;
-  String? ownerName;
+  dynamic latitude;
+  dynamic longitude;
+  dynamic peopleAdded;
+  dynamic assignedTo;
+  dynamic isDeleted;
+  dynamic createdAt;
+  dynamic updatedAt;
+  dynamic sourceName;
+  dynamic statusName;
+  dynamic ownerName;
 
   LeadListData(
       {this.id,

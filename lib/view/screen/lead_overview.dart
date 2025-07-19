@@ -549,10 +549,11 @@ class _LeadOverviewScreenState extends State<LeadOverviewScreen>
                           imageurl: leadDataValue?.image ?? "",
                           height: 60.h,
                           width: 80.w),
-                      CustomAudioPlayer(
-                        audioUrl: leadDataValue!.audio!,
-                        chatId: '',
-                      )
+                      if ((leadDataValue?.audio ?? "").isNotEmpty)
+                        CustomAudioPlayer(
+                          audioUrl: leadDataValue?.audio ?? '',
+                          chatId: '',
+                        )
                     ],
                   ),
                 SizedBox(height: 10.h),

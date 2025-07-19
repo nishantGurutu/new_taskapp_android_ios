@@ -12,6 +12,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:task_management/controller/bottom_bar_navigation_controller.dart';
 import 'package:task_management/controller_binding.dart';
 import 'package:task_management/firebase_messaging/notification_service.dart';
+import 'package:task_management/helper/network_service.dart';
 import 'package:task_management/helper/storage_helper.dart';
 import 'package:task_management/view/screen/bootom_bar.dart';
 import 'package:task_management/view/screen/calender_screen.dart';
@@ -68,7 +69,7 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
+  NetworkService().startMonitoring();
   NotificationAppLaunchDetails? notificationAppLaunchDetails =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 

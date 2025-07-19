@@ -21,6 +21,7 @@ import 'package:task_management/controller/bottom_bar_navigation_controller.dart
 import 'package:task_management/controller/chat_controller.dart';
 import 'package:task_management/controller/feed_controller.dart';
 import 'package:task_management/controller/home_controller.dart';
+import 'package:task_management/controller/lead_controller.dart';
 import 'package:task_management/controller/priority_controller.dart';
 import 'package:task_management/controller/profile_controller.dart';
 import 'package:task_management/controller/project_controller.dart';
@@ -75,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   RxList<bool> assetsListCheckbox = <bool>[].obs;
   final FeedController feedController = Get.put(FeedController());
   final ChatController chatController = Get.put(ChatController());
+  final LeadController leadController = Get.put(LeadController());
   final PriorityController priorityController = Get.find();
   final ProjectController projectController = Get.find();
   DateTime dt = DateTime.now();

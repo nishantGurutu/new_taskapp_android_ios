@@ -11,7 +11,7 @@ class LocationPage extends StatefulWidget {
 
 class _LocationPageState extends State<LocationPage> {
   Location location = Location();
-  LocationData? _currentPosition; // Nullable to avoid LateInitializationError
+  LocationData? _currentPosition;
   String _currentAddress = "";
 
   @override
@@ -22,7 +22,6 @@ class _LocationPageState extends State<LocationPage> {
 
   Future<void> _getLocation() async {
     try {
-      // Check if location service is enabled
       bool _serviceEnabled = await location.serviceEnabled();
       if (!_serviceEnabled) {
         _serviceEnabled = await location.requestService();
@@ -32,7 +31,6 @@ class _LocationPageState extends State<LocationPage> {
         }
       }
 
-      // Check and request location permissions
       PermissionStatus _permissionGranted = await location.hasPermission();
       if (_permissionGranted == PermissionStatus.denied) {
         _permissionGranted = await location.requestPermission();
@@ -42,12 +40,6 @@ class _LocationPageState extends State<LocationPage> {
         }
       }
 
-      // Configure distance filter for location updates
-      // await location.changeNotificationOptions(
-      //   distanceFilter: 10, // Update every 10 meters
-      // );
-
-      // Get initial location
       LocationData initialLocation = await location.getLocation();
       if (initialLocation.latitude != null &&
           initialLocation.longitude != null) {

@@ -1,5 +1,8 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:task_management/constant/custom_toast.dart';
+import 'package:task_management/model/lead_status_lead.dart';
+import 'package:task_management/model/source_list_model.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
@@ -14,18 +17,22 @@ class DatabaseHelper {
   }
 
   Future<Database> initDatabase() async {
-    String path = join(await getDatabasesPath(), 'taskManagement.db');
+    String path = join(await getDatabasesPath(), 'canwinn.db');
     return await openDatabase(path,
-        version: 5, onCreate: _createDb, onUpgrade: _onUpgrade);
+        version: 7, onCreate: _createDb, onUpgrade: _onUpgrade);
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 5) {
+    if (oldVersion < 7) {
       await db.execute('''
-        CREATE TABLE onlineStatus (
-        status TEXT
+      CREATE TABLE IF NOT EXISTS leadStatusList (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        status TEXT,
+        created_at TEXT ,
+        updated_at TEXT
       )
-      ''');
+    ''');
     }
   }
 
@@ -34,6 +41,8 @@ class DatabaseHelper {
     await db.execute('DROP TABLE IF EXISTS locations');
     await db.execute('DROP TABLE IF EXISTS leads');
     await db.execute('DROP TABLE IF EXISTS onlineStatus');
+    await db.execute('DROP TABLE IF EXISTS leadSource');
+    await db.execute('DROP TABLE IF EXISTS leadStatusList');
 
     await db.execute('''
       CREATE TABLE responsiblePerson (
@@ -122,30 +131,72 @@ class DatabaseHelper {
         speed REAL
       )
     ''');
-
     await db.execute('''
-      CREATE TABLE leads (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        lead_name TEXT,
-        company_name TEXT,
-        phone TEXT,
-        email TEXT,
-        source TEXT,
-        industry TEXT,
-        status TEXT,
-        tag TEXT,
-        description TEXT,
-        address TEXT,
-        latitude REAL,
-        longitude REAL,
-        image_path TEXT,
-        audio_path TEXT,
-        timestamp TEXT
-      )
-    ''');
+        CREATE TABLE leads (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          lead_id INTEGER, -- corresponds to API "id"
+          lead_number TEXT,
+          user_id INTEGER,
+          lead_name TEXT,
+          lead_type TEXT,
+          company TEXT,
+          phone TEXT,
+          email TEXT,
+          source INTEGER,
+          designation TEXT,
+          gender TEXT,
+          status INTEGER,
+          no_of_project TEXT,
+          description TEXT,
+          regional_ofc TEXT,
+          reference_details TEXT,
+          image TEXT,
+          audio TEXT,
+          type TEXT,
+          address_type TEXT,
+          address_line1 TEXT,
+          address_line2 TEXT,
+          city_town TEXT,
+          postal_code TEXT,
+          sector_locality TEXT,
+          country TEXT,
+          state TEXT,
+          visiting_card TEXT,
+          latitude REAL,
+          longitude REAL,
+          people_added TEXT,
+          assigned_to TEXT,
+          is_deleted INTEGER,
+          created_at TEXT,
+          updated_at TEXT,
+          source_name TEXT,
+          status_name TEXT,
+          owner_name TEXT,
+          is_synced INTEGER DEFAULT 0 
+        )
+      ''');
+
     await db.execute('''
       CREATE TABLE onlineStatus (
         status TEXT
+      )
+    ''');
+    await db.execute('''
+      CREATE TABLE leadSource (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        source_name TEXT,
+        status TEXT,
+        created_at TEXT ,
+        updated_at TEXT
+      )
+    ''');
+    await db.execute('''
+      CREATE TABLE leadStatusList (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        status TEXT,
+        created_at TEXT ,
+        updated_at TEXT
       )
     ''');
   }
@@ -155,6 +206,52 @@ class DatabaseHelper {
     await db.insert("onlineStatus", {
       'status': status,
     });
+  }
+
+  Future<void> insertLeadSource(SourceListData source) async {
+    final db = await database;
+
+    await db.insert(
+      'leadSource',
+      {
+        'id': source.id,
+        'source_name': source.sourceName,
+        'status': source.status,
+        'created_at': source.createdAt,
+        'updated_at': source.updatedAt,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<List<SourceListData>> getLeadSources() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('leadSource');
+
+    return maps.map((map) => SourceListData.fromJson(map)).toList();
+  }
+
+  Future<void> insertLeadStatus(LeadStatusData statusData) async {
+    final db = await database;
+
+    await db.insert(
+      'leadStatusList',
+      {
+        'id': statusData.id,
+        'name': statusData.name,
+        'status': statusData.status,
+        'created_at': statusData.createdAt,
+        'updated_at': statusData.updatedAt,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<List<LeadStatusData>> getLeadStatus() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('leadStatusList');
+
+    return maps.map((map) => LeadStatusData.fromJson(map)).toList();
   }
 
   Future<void> insertLead({
@@ -205,6 +302,8 @@ class DatabaseHelper {
     );
 
     if (insertedLeads.isNotEmpty) {
+      CustomToast()
+          .showCustomToast("Notwork not available, data daved locally.");
       print('Lead successfully inserted:');
       print(insertedLeads.first);
     } else {
@@ -214,7 +313,7 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> getLeads() async {
     final db = await database;
-    return await db.query('leads', orderBy: 'timestamp DESC');
+    return await db.query('leads');
   }
 
   Future<void> insertLocation(

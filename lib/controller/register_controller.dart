@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:task_management/controller/lead_controller.dart';
 import 'package:task_management/helper/storage_helper.dart';
 import 'package:task_management/model/login_model.dart';
 import 'package:task_management/model/register_model.dart';
@@ -39,6 +40,8 @@ class RegisterController extends GetxController {
     isLoading.value = false;
   }
 
+  final LeadController leadController = Get.put(LeadController());
+
   // Login function
   var isLoginLoading = false.obs;
   var loginModel = LoginModel().obs;
@@ -59,6 +62,8 @@ class RegisterController extends GetxController {
         appVersion: appVersion);
     if (result != null) {
       loginModel.value = result;
+      await leadController.statusListApi(status: '');
+      await leadController.sourceList(source: '');
     } else {}
     isLoginLoading.value = false;
   }
