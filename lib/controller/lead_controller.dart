@@ -313,29 +313,72 @@ class LeadController extends GetxController {
   var isLeadLoading = false.obs;
   RxList<LeadListData> leadsListData = <LeadListData>[].obs;
   RxList<LeadStatusData> selectedStatusPerLead = <LeadStatusData>[].obs;
+
   // Future<void> leadsList(int? id) async {
   //   isLeadLoading.value = true;
-  //   final result = await LeadService().leadsListApi(id);
-  //   final offlineLeads = await DatabaseHelper.instance.getLeads();
-  //   leadsListData.clear();
-  //   leadsListData.addAll(
-  //     offlineLeads.map((e) => LeadListData.fromJson(e)).toList(),
-  //   );
-  //   leadsListData.addAll(result!.data!.reversed.toList());
-  //   leadsListData.refresh();
+  //   try {
+  //     // Fetch online leads
+  //     final result = await LeadService().leadsListApi(id);
+  //     final offlineLeads = await DatabaseHelper.instance.getLeads();
+  //     final db = await DatabaseHelper.instance.database;
 
-  //   selectedStatusPerLead.addAll(
-  //       List<LeadStatusData>.filled(leadsListData.length, LeadStatusData()));
-  //   for (int i = 0; i < leadsListData.length; i++) {
-  //     for (int j = 0; j < leadStatusData.length; j++) {
-  //       if (leadsListData[i].status == leadStatusData[j].id) {
-  //         selectedStatusPerLead[i] = leadStatusData[j];
-  //         break;
+  //     // Check for online leads with matching phone numbers in local database
+  //     if (result != null && result.data != null) {
+  //       for (var onlineLead in result.data!) {
+  //         if (onlineLead.phone != null && onlineLead.phone!.isNotEmpty) {
+  //           final matchingLeads = await db.query(
+  //             'leads',
+  //             where: 'phone = ?',
+  //             whereArgs: [onlineLead.phone],
+  //           );
+  //           for (var matchingLead in matchingLeads) {
+  //             final leadId = matchingLead['id'] as int;
+  //             final deleteResult =
+  //                 await DatabaseHelper.instance.deleteLead(leadId);
+  //             if (deleteResult > 0) {
+  //               debugPrint(
+  //                   "Deleted offline lead with phone ${onlineLead.phone} from local database.");
+  //               CustomToast().showCustomToast(
+  //                   'Offline lead with phone ${onlineLead.phone} removed.');
+  //             } else {
+  //               debugPrint(
+  //                   "Failed to delete offline lead with phone ${onlineLead.phone}.");
+  //             }
+  //           }
+  //         }
   //       }
   //     }
+
+  //     final updatedOfflineLeads = await DatabaseHelper.instance.getLeads();
+
+  //     leadsListData.clear();
+  //     leadsListData.addAll(
+  //       updatedOfflineLeads.map((e) => LeadListData.fromJson(e)).toList(),
+  //     );
+  //     if (result != null && result.data != null) {
+  //       leadsListData.addAll(result.data!.reversed.toList());
+  //     }
+  //     leadsListData.refresh();
+
+  //     selectedStatusPerLead.clear();
+  //     selectedStatusPerLead.addAll(
+  //       List<LeadStatusData>.filled(leadsListData.length, LeadStatusData()),
+  //     );
+  //     for (int i = 0; i < leadsListData.length; i++) {
+  //       for (int j = 0; j < leadStatusData.length; j++) {
+  //         if (leadsListData[i].status == leadStatusData[j].id) {
+  //           selectedStatusPerLead[i] = leadStatusData[j];
+  //           break;
+  //         }
+  //       }
+  //     }
+  //   } catch (e) {
+  //     debugPrint("Error fetching leads: $e");
+  //     Get.snackbar('Error', 'Failed to fetch leads: $e',
+  //         snackPosition: SnackPosition.BOTTOM);
+  //   } finally {
+  //     isLeadLoading.value = false;
   //   }
-  //   isLeadLoading.value = false;
-  //   isLeadLoading.value = false;
   // }
 
   Future<void> leadsList(int? id) async {
@@ -346,14 +389,20 @@ class LeadController extends GetxController {
       final offlineLeads = await DatabaseHelper.instance.getLeads();
       final db = await DatabaseHelper.instance.database;
 
-      // Check for online leads with matching phone numbers in local database
+      // Check for online leads with matching phone and lead_name in local database
       if (result != null && result.data != null) {
         for (var onlineLead in result.data!) {
-          if (onlineLead.phone != null && onlineLead.phone!.isNotEmpty) {
+          if (onlineLead.phone != null &&
+              onlineLead.phone!.isNotEmpty &&
+              onlineLead.leadName != null &&
+              onlineLead.leadName!.isNotEmpty) {
             final matchingLeads = await db.query(
               'leads',
-              where: 'phone = ?',
-              whereArgs: [onlineLead.phone],
+              where: 'phone = ? AND lead_name = ?',
+              whereArgs: [
+                onlineLead.phone!.trim(), // Normalize phone
+                onlineLead.leadName!.trim(), // Normalize lead_name
+              ],
             );
             for (var matchingLead in matchingLeads) {
               final leadId = matchingLead['id'] as int;
@@ -361,20 +410,30 @@ class LeadController extends GetxController {
                   await DatabaseHelper.instance.deleteLead(leadId);
               if (deleteResult > 0) {
                 debugPrint(
-                    "Deleted offline lead with phone ${onlineLead.phone} from local database.");
-                CustomToast().showCustomToast(
-                    'Offline lead with phone ${onlineLead.phone} removed.');
+                    "Deleted offline lead with phone ${onlineLead.phone} and name ${onlineLead.leadName} from local database.");
+                Get.snackbar(
+                  'Success',
+                  'Offline lead with phone ${onlineLead.phone} removed.',
+                  snackPosition: SnackPosition.BOTTOM,
+                );
               } else {
                 debugPrint(
-                    "Failed to delete offline lead with phone ${onlineLead.phone}.");
+                    "Failed to delete offline lead with phone ${onlineLead.phone} and name ${onlineLead.leadName}.");
+                Get.snackbar(
+                  'Error',
+                  'Failed to delete offline lead with phone ${onlineLead.phone}.',
+                  snackPosition: SnackPosition.BOTTOM,
+                );
               }
             }
           }
         }
       }
 
+      // Refresh offline leads after deletions
       final updatedOfflineLeads = await DatabaseHelper.instance.getLeads();
 
+      // Clear and populate leadsListData
       leadsListData.clear();
       leadsListData.addAll(
         updatedOfflineLeads.map((e) => LeadListData.fromJson(e)).toList(),
@@ -384,6 +443,7 @@ class LeadController extends GetxController {
       }
       leadsListData.refresh();
 
+      // Update selectedStatusPerLead
       selectedStatusPerLead.clear();
       selectedStatusPerLead.addAll(
         List<LeadStatusData>.filled(leadsListData.length, LeadStatusData()),
@@ -398,8 +458,11 @@ class LeadController extends GetxController {
       }
     } catch (e) {
       debugPrint("Error fetching leads: $e");
-      Get.snackbar('Error', 'Failed to fetch leads: $e',
-          snackPosition: SnackPosition.BOTTOM);
+      Get.snackbar(
+        'Error',
+        'Failed to fetch leads: $e',
+        snackPosition: SnackPosition.BOTTOM,
+      );
     } finally {
       isLeadLoading.value = false;
     }

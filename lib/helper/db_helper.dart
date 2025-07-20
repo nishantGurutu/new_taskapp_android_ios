@@ -219,7 +219,7 @@ class DatabaseHelper {
 
   Future<void> clearLeadsTable() async {
     final db = await instance.database;
-    await db.delete('leads'); // replace 'leads' with your local table name
+    await db.delete('leads');
   }
 
   Future<void> insertStatus({required String status}) async {
