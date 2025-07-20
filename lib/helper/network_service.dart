@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:task_management/helper/db_helper.dart';
 import 'dart:async';
 
 import 'package:task_management/model/lead_list_model.dart';
@@ -19,19 +20,19 @@ class NetworkService {
           toastLength: Toast.LENGTH_SHORT,
         );
 
-        // final offlineLeads = await DatabaseHelper.instance.getLeads();
+        final offlineLeads = await DatabaseHelper.instance.getLeads();
 
-        // for (var leadMap in offlineLeads) {
-        //   final lead = LeadListData.fromJson(leadMap);
-        //   await _uploadOfflineLead(lead);
-        // }
+        for (var leadMap in offlineLeads) {
+          final lead = LeadListData.fromJson(leadMap);
+          await _uploadOfflineLead(lead);
+        }
 
-        // // After all are uploaded, clear offline leads table
-        // await DatabaseHelper.instance.clearLeadsTable();
-        // Fluttertoast.showToast(
-        //   msg: "api calling",
-        //   toastLength: Toast.LENGTH_SHORT,
-        // );
+        // After all are uploaded, clear offline leads table
+        await DatabaseHelper.instance.clearLeadsTable();
+        Fluttertoast.showToast(
+          msg: "api calling",
+          toastLength: Toast.LENGTH_SHORT,
+        );
       } else {
         Fluttertoast.showToast(
           msg: "No Internet Connection",
@@ -47,14 +48,14 @@ class NetworkService {
       File audioFile = File(lead.audio ?? '');
 
       final result = await LeadService().addLeadsApi(
-        leadName: lead.leadName,
-        companyName: lead.company,
-        phone: lead.phone,
-        email: lead.email,
-        source: lead.source,
-        status: lead.status,
-        description: lead.description,
-        pickedFile: lead.image,
+        leadName: lead.leadName.toString(),
+        companyName: lead.company.toString(),
+        phone: lead.phone.toString(),
+        email: lead.email.toString(),
+        source: lead.source.toString(),
+        status: lead.status.toString(),
+        description: lead.description.toString(),
+        pickedFile: File(lead.image),
         audio: audioFile,
       );
 
