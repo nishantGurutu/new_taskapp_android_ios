@@ -52,11 +52,8 @@ class NetworkService {
         phone: lead.phone,
         email: lead.email,
         source: lead.source,
-        industry: lead.company,
         status: lead.status,
-        tag: '',
         description: lead.description,
-        address: '',
         pickedFile: lead.image,
         audio: audioFile,
       );

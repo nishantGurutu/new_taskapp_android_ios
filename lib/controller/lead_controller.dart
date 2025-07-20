@@ -255,7 +255,6 @@ class LeadController extends GetxController {
     required String status,
     required String tag,
     required String description,
-    required String address,
     required File audio,
   }) async {
     isLeadAdding.value = true;
@@ -265,12 +264,9 @@ class LeadController extends GetxController {
       phone: phone,
       email: email,
       source: source,
-      industry: industry,
       status: status,
-      tag: tag,
       description: description,
-      address: address,
-      pickedFile: pickedFile,
+      pickedFile: pickedFile.value,
       audio: audio,
     );
     if (result != null) {
@@ -786,6 +782,33 @@ class LeadController extends GetxController {
       leadContactData.assignAll(result.data!);
     }
     isLeadContactLoading.value = false;
+  }
+
+  Future<void> uploadOfflineLead(LeadListData lead) async {
+    try {
+      // Assume audio is saved locally, get it from path
+      File audioFile = File(lead.audio ?? '');
+
+      final result = await LeadService().addLeadsApi(
+        leadName: lead.leadName.toString(),
+        companyName: lead.company.toString(),
+        phone: lead.phone.toString(),
+        email: lead.email.toString(),
+        source: lead.source.toString(),
+        status: lead.status.toString(),
+        description: lead.description.toString(),
+        pickedFile: File(lead.image),
+        audio: audioFile,
+      );
+
+      if (result != null) {
+        debugPrint("Offline lead ${lead.leadName} synced successfully.");
+      } else {
+        debugPrint("Failed to sync offline lead: ${lead.leadName}");
+      }
+    } catch (e) {
+      debugPrint("Exception during lead sync: $e");
+    }
   }
 
   var profilePicPath = "".obs;

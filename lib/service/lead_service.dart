@@ -32,17 +32,14 @@ import 'package:task_management/model/user_report_model.dart';
 class LeadService {
   final Dio _dio = Dio();
   Future<bool> addLeadsApi({
-    required String leadName,
-    required String companyName,
-    required String phone,
-    required String email,
-    required String source,
-    required String industry,
-    required String status,
-    required String tag,
-    required String description,
-    required String address,
-    required Rx<File> pickedFile,
+    required dynamic leadName,
+    required dynamic companyName,
+    required dynamic phone,
+    required dynamic email,
+    required dynamic source,
+    required dynamic status,
+    required dynamic description,
+    required File pickedFile,
     required File audio,
   }) async {
     try {
@@ -72,10 +69,10 @@ class LeadService {
         'longitude': '${LocationHandler.currentPosition?.longitude}',
       };
 
-      if (pickedFile.value.path.isNotEmpty) {
-        final fileName = pickedFile.value.path.split('/').last;
+      if (pickedFile.path.isNotEmpty) {
+        final fileName = pickedFile.path.split('/').last;
         formDataMap['image'] = await MultipartFile.fromFile(
-          pickedFile.value.path,
+          pickedFile.path,
           filename: fileName,
         );
       }

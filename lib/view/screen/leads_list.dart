@@ -474,7 +474,13 @@ class _LeadListState extends State<LeadList> {
                                                             "")
                                                         .isEmpty)
                                                       InkWell(
-                                                        onTap: () {},
+                                                        onTap: () {
+                                                          leadController
+                                                              .uploadOfflineLead(
+                                                                  leadController
+                                                                          .leadsListData[
+                                                                      index]);
+                                                        },
                                                         child: Container(
                                                           child: Row(
                                                             children: [
