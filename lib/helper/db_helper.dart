@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:task_management/constant/custom_toast.dart';
@@ -355,6 +356,7 @@ class DatabaseHelper {
 
       final allLeads = await db.query('leads');
       if (allLeads.isNotEmpty) {
+        Get.back();
         CustomToast()
             .showCustomToast("Network not available, data saved locally.");
         print('All leads in database: $allLeads');

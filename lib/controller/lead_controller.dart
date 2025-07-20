@@ -251,9 +251,7 @@ class LeadController extends GetxController {
     required String phone,
     required String email,
     required String source,
-    required String industry,
     required String status,
-    required String tag,
     required String description,
     required File audio,
   }) async {

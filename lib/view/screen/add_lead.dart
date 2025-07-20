@@ -498,17 +498,14 @@ class _AddLeadsState extends State<AddLeads> {
                                       //             ?.id
                                       //             ?.toString() ??
                                       //         '',
-                                      //     industry: industryController.text,
                                       //     status: leadController
                                       //             .addselectedLeadStatusData
                                       //             .value
                                       //             ?.id
                                       //             .toString() ??
                                       //         "",
-                                      //     tag: tagController.text,
                                       //     description:
                                       //         descriptionController.text,
-                                      //     address: addressController.text,
                                       //     audio: attachment,
                                       //   );
                                       // } else {
@@ -542,17 +539,6 @@ class _AddLeadsState extends State<AddLeads> {
                                             DateTime.now().toIso8601String(),
                                       );
 
-                                      // final offlineLeads = await DatabaseHelper
-                                      //     .instance
-                                      //     .getLeads();
-                                      // leadController.leadsListData.clear();
-                                      // leadController.leadsListData.addAll(
-                                      //   offlineLeads
-                                      //       .map(
-                                      //           (e) => LeadListData.fromJson(e))
-                                      //       .toList(),
-                                      // );
-                                      // leadController.leadsListData.refresh();
                                       leadController.getOflineLeadList();
                                       // }
                                       attachment = File('');

@@ -25,7 +25,6 @@ class NetworkService {
           await _uploadOfflineLead(lead);
         }
 
-        // After all are uploaded, clear offline leads table
         await DatabaseHelper.instance.clearLeadsTable();
         Fluttertoast.showToast(
           msg: "api calling",
@@ -42,7 +41,6 @@ class NetworkService {
 
   Future<void> _uploadOfflineLead(LeadListData lead) async {
     try {
-      // Assume audio is saved locally, get it from path
       File audioFile = File(lead.audio ?? '');
 
       final result = await LeadService().addLeadsApi(
