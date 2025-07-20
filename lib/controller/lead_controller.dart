@@ -318,10 +318,12 @@ class LeadController extends GetxController {
     final result = await LeadService().leadsListApi(id);
     if (result != null) {
       final offlineLeads = await DatabaseHelper.instance.getLeads();
+      leadsListData.clear();
       leadsListData.addAll(
         offlineLeads.map((e) => LeadListData.fromJson(e)).toList(),
       );
-      leadsListData.assignAll(result.data!.reversed.toList());
+      leadsListData.addAll(result.data!.reversed.toList());
+      leadsListData.refresh();
 
       selectedStatusPerLead.addAll(
           List<LeadStatusData>.filled(leadsListData.length, LeadStatusData()));
@@ -380,8 +382,8 @@ class LeadController extends GetxController {
         }
       }
       print('lead selected id from home ${selectedLeadStatusData.value?.id}');
-      await getOflineLeadList();
-      // await leadsList(selectedLeadStatusData.value?.id);
+      // await getOflineLeadList();
+      await leadsList(selectedLeadStatusData.value?.id);
     }
   }
 
@@ -463,7 +465,6 @@ class LeadController extends GetxController {
 
   var followupStatusList = ["Done", "Not Done", "Reshedule"].obs;
   RxList<String> selectedStatusTypeList = <String>[].obs;
-  //Follow ups list
   RxList<FollowUpsListData> followUpsListData = <FollowUpsListData>[].obs;
   Rx<FollowUpsListData?> selectedFollowUpsListData =
       Rx<FollowUpsListData?>(null);

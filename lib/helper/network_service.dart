@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:task_management/helper/db_helper.dart';
 import 'dart:async';
-
 import 'package:task_management/model/lead_list_model.dart';
 import 'package:task_management/service/lead_service.dart';
 
