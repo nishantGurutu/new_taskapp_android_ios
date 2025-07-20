@@ -17,7 +17,7 @@ class DatabaseHelper {
   }
 
   Future<Database> initDatabase() async {
-    String path = join(await getDatabasesPath(), 'canwinn.db');
+    String path = join(await getDatabasesPath(), 'canwinn_pro1.db');
     return await openDatabase(path,
         version: 7, onCreate: _createDb, onUpgrade: _onUpgrade);
   }
@@ -201,6 +201,11 @@ class DatabaseHelper {
     ''');
   }
 
+  Future<void> clearLeadsTable() async {
+    final db = await instance.database;
+    await db.delete('leads'); // replace 'leads' with your local table name
+  }
+
   Future<void> insertStatus({required String status}) async {
     final db = await database;
     await db.insert("onlineStatus", {
@@ -254,15 +259,69 @@ class DatabaseHelper {
     return maps.map((map) => LeadStatusData.fromJson(map)).toList();
   }
 
+  // Future<void> insertLead({
+  //   required String leadName,
+  //   required String companyName,
+  //   required String phone,
+  //   required String email,
+  //   required String source,
+  //   required String industry,
+  //   required String status,
+  //   required String tag,
+  //   required String description,
+  //   required String address,
+  //   required String imagePath,
+  //   required String audioPath,
+  //   required double? latitude,
+  //   required double? longitude,
+  //   required String timestamp,
+  // }) async {
+  //   final db = await database;
+
+  //   await db.insert(
+  //     'leads',
+  //     {
+  //       'lead_name': leadName,
+  //       'company_name': companyName,
+  //       'phone': phone,
+  //       'email': email,
+  //       'source': source,
+  //       'industry': industry,
+  //       'status': status,
+  //       'tag': tag,
+  //       'description': description,
+  //       'address': address,
+  //       'latitude': latitude,
+  //       'longitude': longitude,
+  //       'image_path': imagePath,
+  //       'audio_path': audioPath,
+  //       'timestamp': timestamp,
+  //     },
+  //     conflictAlgorithm: ConflictAlgorithm.replace,
+  //   );
+
+  //   final insertedLeads = await db.query(
+  //     'leads',
+  //     where: 'timestamp = ?',
+  //     whereArgs: [timestamp],
+  //   );
+
+  //   if (insertedLeads.isNotEmpty) {
+  //     CustomToast()
+  //         .showCustomToast("Notwork not available, data daved locally.");
+  //     print('Lead successfully inserted:');
+  //     print(insertedLeads.first);
+  //   } else {
+  //     print('Failed to find the inserted lead in the database.');
+  //   }
+  // }
   Future<void> insertLead({
     required String leadName,
     required String companyName,
     required String phone,
     required String email,
     required String source,
-    required String industry,
     required String status,
-    required String tag,
     required String description,
     required String address,
     required String imagePath,
@@ -273,41 +332,38 @@ class DatabaseHelper {
   }) async {
     final db = await database;
 
-    await db.insert(
-      'leads',
-      {
-        'lead_name': leadName,
-        'company_name': companyName,
-        'phone': phone,
-        'email': email,
-        'source': source,
-        'industry': industry,
-        'status': status,
-        'tag': tag,
-        'description': description,
-        'address': address,
-        'latitude': latitude,
-        'longitude': longitude,
-        'image_path': imagePath,
-        'audio_path': audioPath,
-        'timestamp': timestamp,
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    try {
+      await db.insert(
+        'leads',
+        {
+          'lead_name': leadName,
+          'company': companyName,
+          'phone': phone,
+          'email': email,
+          'source': source,
+          'status': status,
+          'description': description,
+          'address_line1': address, // Map address to address_line1
+          'image': imagePath, // Map image_path to image
+          'audio': audioPath, // Map audio_path to audio
+          'latitude': latitude,
+          'longitude': longitude,
+          'created_at': timestamp, // Map timestamp to created_at
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
 
-    final insertedLeads = await db.query(
-      'leads',
-      where: 'timestamp = ?',
-      whereArgs: [timestamp],
-    );
-
-    if (insertedLeads.isNotEmpty) {
-      CustomToast()
-          .showCustomToast("Notwork not available, data daved locally.");
-      print('Lead successfully inserted:');
-      print(insertedLeads.first);
-    } else {
-      print('Failed to find the inserted lead in the database.');
+      final allLeads = await db.query('leads');
+      if (allLeads.isNotEmpty) {
+        CustomToast()
+            .showCustomToast("Network not available, data saved locally.");
+        print('All leads in database: $allLeads');
+      } else {
+        print('No leads found in the database after insertion.');
+      }
+    } catch (e) {
+      print('Error inserting lead: $e');
+      CustomToast().showCustomToast("Failed to save lead locally.");
     }
   }
 

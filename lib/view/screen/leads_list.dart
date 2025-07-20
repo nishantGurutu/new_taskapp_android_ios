@@ -74,19 +74,19 @@ class _LeadListState extends State<LeadList> {
     isLoading.value = true;
     leadController.selectedStatusPerLead.clear();
     if (widget.status == "total" || widget.status!.isEmpty) {
-      await leadController.statusListApi(status: widget.status);
+      await leadController.offLineStatusdata(status: widget.status);
     } else if (widget.status == 'pl') {
-      await leadController.statusListApi(status: widget.status);
+      await leadController.offLineStatusdata(status: widget.status);
     } else if (widget.status == "spl") {
-      await leadController.statusListApi(status: widget.status);
+      await leadController.offLineStatusdata(status: widget.status);
     } else if (widget.status == "new lead") {
-      await leadController.statusListApi(status: widget.status);
+      await leadController.offLineStatusdata(status: widget.status);
     } else if (widget.status == "won") {
-      await leadController.statusListApi(status: widget.status);
+      await leadController.offLineStatusdata(status: widget.status);
     } else if (widget.status == "quotation") {
-      await leadController.statusListApi(status: widget.status);
+      await leadController.offLineStatusdata(status: widget.status);
     } else if (widget.status == "lost") {
-      await leadController.statusListApi(status: widget.status);
+      await leadController.offLineStatusdata(status: widget.status);
     }
     isLoading.value = false;
     await leadController.taskResponsiblePersonListApi();

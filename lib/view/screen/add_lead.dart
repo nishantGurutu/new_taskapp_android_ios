@@ -13,6 +13,7 @@ import 'package:task_management/controller/lead_controller.dart';
 import 'package:task_management/custom_widget/button_widget.dart';
 import 'package:task_management/custom_widget/task_text_field.dart';
 import 'package:task_management/helper/db_helper.dart';
+import 'package:task_management/model/lead_list_model.dart';
 import 'package:task_management/model/lead_status_lead.dart';
 import 'package:task_management/model/source_list_model.dart';
 import 'package:task_management/view/widgets/voiceRecorderButton.dart';
@@ -49,8 +50,6 @@ class _AddLeadsState extends State<AddLeads> {
       leadController.selectedLeadStatusData.value = null;
       leadController.offLineSourcedata();
       leadController.offLineStatusdata();
-      // leadController.statusListApi(status: '');
-      // leadController.sourceList(source: '');
     });
     super.initState();
   }
@@ -486,68 +485,76 @@ class _AddLeadsState extends State<AddLeads> {
                                       bool isConnected = connectivityResult !=
                                           ConnectivityResult.none;
 
-                                      if (isConnected) {
-                                        leadController.addLeads(
-                                          leadName: leadNameController.text,
-                                          companyName:
-                                              companyNameController.text,
-                                          phone: phoneController.text,
-                                          email: emailController.text,
-                                          source: leadController
-                                                  .selectedSourceListData
-                                                  .value
-                                                  ?.id
-                                                  ?.toString() ??
-                                              '',
-                                          industry: industryController.text,
-                                          status: leadController
-                                                  .addselectedLeadStatusData
-                                                  .value
-                                                  ?.id
-                                                  .toString() ??
-                                              "",
-                                          tag: tagController.text,
-                                          description:
-                                              descriptionController.text,
-                                          address: addressController.text,
-                                          audio: attachment,
-                                        );
-                                      } else {
-                                        await DatabaseHelper.instance
-                                            .insertLead(
-                                          leadName: leadNameController.text,
-                                          companyName:
-                                              companyNameController.text,
-                                          phone: phoneController.text,
-                                          email: emailController.text,
-                                          source: leadController
-                                                  .selectedSourceListData
-                                                  .value
-                                                  ?.id
-                                                  ?.toString() ??
-                                              '',
-                                          industry: industryController.text,
-                                          status: leadController
-                                                  .addselectedLeadStatusData
-                                                  .value
-                                                  ?.id
-                                                  ?.toString() ??
-                                              '',
-                                          tag: tagController.text,
-                                          description:
-                                              descriptionController.text,
-                                          address: addressController.text,
-                                          imagePath: leadController
-                                              .pickedFile.value.path,
-                                          audioPath: attachment.path,
-                                          latitude: LocationHandler
-                                              .currentPosition?.latitude,
-                                          longitude: LocationHandler
-                                              .currentPosition?.longitude,
-                                          timestamp:
-                                              DateTime.now().toIso8601String(),
-                                        );
-                                      }
+                                      // if (isConnected) {
+                                      //   leadController.addLeads(
+                                      //     leadName: leadNameController.text,
+                                      //     companyName:
+                                      //         companyNameController.text,
+                                      //     phone: phoneController.text,
+                                      //     email: emailController.text,
+                                      //     source: leadController
+                                      //             .selectedSourceListData
+                                      //             .value
+                                      //             ?.id
+                                      //             ?.toString() ??
+                                      //         '',
+                                      //     industry: industryController.text,
+                                      //     status: leadController
+                                      //             .addselectedLeadStatusData
+                                      //             .value
+                                      //             ?.id
+                                      //             .toString() ??
+                                      //         "",
+                                      //     tag: tagController.text,
+                                      //     description:
+                                      //         descriptionController.text,
+                                      //     address: addressController.text,
+                                      //     audio: attachment,
+                                      //   );
+                                      // } else {
+                                      await DatabaseHelper.instance.insertLead(
+                                        leadName: leadNameController.text,
+                                        companyName: companyNameController.text,
+                                        phone: phoneController.text,
+                                        email: emailController.text,
+                                        source: leadController
+                                                .selectedSourceListData
+                                                .value
+                                                ?.id
+                                                ?.toString() ??
+                                            '',
+                                        status: leadController
+                                                .addselectedLeadStatusData
+                                                .value
+                                                ?.id
+                                                ?.toString() ??
+                                            '',
+                                        description: descriptionController.text,
+                                        address: addressController.text,
+                                        imagePath: leadController
+                                            .pickedFile.value.path,
+                                        audioPath: attachment.path,
+                                        latitude: LocationHandler
+                                            .currentPosition?.latitude,
+                                        longitude: LocationHandler
+                                            .currentPosition?.longitude,
+                                        timestamp:
+                                            DateTime.now().toIso8601String(),
+                                      );
+
+                                      // final offlineLeads = await DatabaseHelper
+                                      //     .instance
+                                      //     .getLeads();
+                                      // leadController.leadsListData.clear();
+                                      // leadController.leadsListData.addAll(
+                                      //   offlineLeads
+                                      //       .map(
+                                      //           (e) => LeadListData.fromJson(e))
+                                      //       .toList(),
+                                      // );
+                                      // leadController.leadsListData.refresh();
+                                      leadController.getOflineLeadList();
+                                      // }
                                       attachment = File('');
                                       leadController.pickedFile.value =
                                           File('');

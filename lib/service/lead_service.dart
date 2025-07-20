@@ -106,23 +106,7 @@ class LeadService {
       if (response.statusCode == 200 || response.statusCode == 201) {
         // Save to database after successful API call
         await DatabaseHelper.instance.insertStatus(status: "online");
-        // await DatabaseHelper.instance.insertLead(
-        //   leadName: leadName,
-        //   companyName: companyName,
-        //   phone: phone,
-        //   email: email,
-        //   source: source,
-        //   industry: industry,
-        //   status: status,
-        //   tag: tag,
-        //   description: description,
-        //   address: address,
-        //   imagePath: pickedFile.value.path,
-        //   audioPath: audio.path,
-        //   latitude: LocationHandler.currentPosition?.latitude,
-        //   longitude: LocationHandler.currentPosition?.longitude,
-        //   timestamp: DateTime.now().toIso8601String(),
-        // );
+
         CustomToast().showCustomToast(response.data['message']);
         return true;
       } else if (response.statusCode == 400) {

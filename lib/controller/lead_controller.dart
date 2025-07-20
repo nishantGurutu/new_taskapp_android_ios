@@ -327,11 +327,6 @@ class LeadController extends GetxController {
       );
       leadsListData.assignAll(result.data!.reversed.toList());
 
-      print("offline db data getting ${leadsListData.length}");
-      print("offline db data getting 2 ${offlineLeads}");
-      print("offline db data getting 3 ${offlineLeads.length}");
-
-      print("offline db data getting 4 ${leadsListData.length}");
       selectedStatusPerLead.addAll(
           List<LeadStatusData>.filled(leadsListData.length, LeadStatusData()));
       for (int i = 0; i < leadsListData.length; i++) {
@@ -375,17 +370,44 @@ class LeadController extends GetxController {
     refresh();
   }
 
-  Future<void> offLineStatusdata() async {
+  Future<void> offLineStatusdata({String? status}) async {
     final result = await DatabaseHelper.instance.getLeadStatus();
     leadStatusData.assignAll(result);
-    print('kdje93 fiyr874 ${leadStatusData[0].name}');
+    // print('kdje93 fiyr874 ${leadStatusData[0].name}');
     refresh();
+    if (status != null) {
+      for (var val in leadStatusData) {
+        if (val.id.toString() == status.toString() ||
+            val.name.toString().toLowerCase() == status.toString()) {
+          selectedLeadStatusData.value = val;
+          break;
+        }
+      }
+      print('lead selected id from home ${selectedLeadStatusData.value?.id}');
+      await getOflineLeadList();
+      // await leadsList(selectedLeadStatusData.value?.id);
+    }
   }
-  // Future<void> offLineSourcedata() async {
-  //   final result = await DatabaseHelper.instance.getLeadSources();
-  //   sourceListData.assignAll(result);
-  //   refresh();
-  // }
+
+  Future<void> getOflineLeadList() async {
+    final offlineLeads = await DatabaseHelper.instance.getLeads();
+    leadsListData.clear();
+    leadsListData.addAll(
+      offlineLeads.map((e) => LeadListData.fromJson(e)).toList(),
+    );
+    leadsListData.refresh();
+
+    selectedStatusPerLead.addAll(
+        List<LeadStatusData>.filled(leadsListData.length, LeadStatusData()));
+    for (int i = 0; i < leadsListData.length; i++) {
+      for (int j = 0; j < leadStatusData.length; j++) {
+        if (leadsListData[i].status == leadStatusData[j].id) {
+          selectedStatusPerLead[i] = leadStatusData[j];
+          break;
+        }
+      }
+    }
+  }
 
   var isStatusListLoading = false.obs;
 

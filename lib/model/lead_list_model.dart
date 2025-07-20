@@ -113,7 +113,7 @@ class LeadListData {
     userId = json['user_id'];
     leadName = json['lead_name'];
     leadType = json['lead_type'];
-    company = json['company'];
+    company = json['company_name'] ?? json['company'];
     phone = json['phone'];
     email = json['email'];
     source = json['source'];
@@ -124,8 +124,8 @@ class LeadListData {
     description = json['description'];
     regionalOfc = json['regional_ofc'];
     referenceDetails = json['reference_details'];
-    image = json['image'];
-    audio = json['audio'];
+    image = json['image_path'] ?? json['image'];
+    audio = json['audio_path'] ?? json['audio'];
     type = json['type'];
     addressType = json['address_type'];
     addressLine1 = json['address_line1'];
