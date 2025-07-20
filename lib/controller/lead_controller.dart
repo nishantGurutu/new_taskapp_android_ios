@@ -4,8 +4,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:task_management/constant/color_constant.dart';
 import 'package:task_management/constant/custom_toast.dart';
 import 'package:task_management/data/model/visit_type_list.dart';
 import 'package:task_management/firebase_messaging/notification_service.dart';
@@ -360,9 +362,8 @@ class LeadController extends GetxController {
               if (deleteResult > 0) {
                 debugPrint(
                     "Deleted offline lead with phone ${onlineLead.phone} from local database.");
-                Get.snackbar('Success',
-                    'Offline lead with phone ${onlineLead.phone} removed.',
-                    snackPosition: SnackPosition.BOTTOM);
+                CustomToast().showCustomToast(
+                    'Offline lead with phone ${onlineLead.phone} removed.');
               } else {
                 debugPrint(
                     "Failed to delete offline lead with phone ${onlineLead.phone}.");
