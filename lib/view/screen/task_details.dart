@@ -705,12 +705,11 @@ class _TaskDetailsState extends State<TaskDetails> {
                   ),
                   TaskCustomTextField(
                     controller: subTaskRemarkController,
-                    textCapitalization: TextCapitalization.sentences,
+                    textCapitalization: TextCapitalization.none,
                     data: statusRemark,
                     hintText: statusRemark,
                     labelText: statusRemark,
                     index: 0,
-                    maxLine: 3,
                     focusedIndexNotifier: focusedIndexNotifier,
                   ),
                   SizedBox(

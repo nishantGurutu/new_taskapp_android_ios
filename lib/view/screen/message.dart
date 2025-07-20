@@ -597,6 +597,9 @@ class _MessageScreenState extends State<MessageScreen> {
                                       controller: messageTextEditingController,
                                       textCapitalization:
                                           TextCapitalization.sentences,
+                                      keyboardType: TextInputType.multiline,
+                                      maxLines: null,
+                                      textInputAction: TextInputAction.newline,
                                       decoration: InputDecoration(
                                         prefixIcon: InkWell(
                                           onTap: () {

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:task_management/controller/lead_controller.dart';
 import 'package:task_management/helper/db_helper.dart';
 import 'dart:async';
 import 'package:task_management/model/lead_list_model.dart';
@@ -25,7 +26,6 @@ class NetworkService {
           await _uploadOfflineLead(lead);
         }
 
-        await DatabaseHelper.instance.clearLeadsTable();
         Fluttertoast.showToast(
           msg: "api calling",
           toastLength: Toast.LENGTH_SHORT,
@@ -56,6 +56,9 @@ class NetworkService {
       );
 
       if (result != null) {
+        await DatabaseHelper.instance.clearLeadsTable();
+
+        await LeadController().leadsList(null);
         debugPrint("Offline lead ${lead.leadName} synced successfully.");
       } else {
         debugPrint("Failed to sync offline lead: ${lead.leadName}");

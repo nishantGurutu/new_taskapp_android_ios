@@ -314,27 +314,26 @@ class LeadController extends GetxController {
   Future<void> leadsList(int? id) async {
     isLeadLoading.value = true;
     final result = await LeadService().leadsListApi(id);
-    if (result != null) {
-      final offlineLeads = await DatabaseHelper.instance.getLeads();
-      leadsListData.clear();
-      leadsListData.addAll(
-        offlineLeads.map((e) => LeadListData.fromJson(e)).toList(),
-      );
-      leadsListData.addAll(result.data!.reversed.toList());
-      leadsListData.refresh();
+    final offlineLeads = await DatabaseHelper.instance.getLeads();
+    leadsListData.clear();
+    leadsListData.addAll(
+      offlineLeads.map((e) => LeadListData.fromJson(e)).toList(),
+    );
+    leadsListData.addAll(result!.data!.reversed.toList());
+    leadsListData.refresh();
 
-      selectedStatusPerLead.addAll(
-          List<LeadStatusData>.filled(leadsListData.length, LeadStatusData()));
-      for (int i = 0; i < leadsListData.length; i++) {
-        for (int j = 0; j < leadStatusData.length; j++) {
-          if (leadsListData[i].status == leadStatusData[j].id) {
-            selectedStatusPerLead[i] = leadStatusData[j];
-            break;
-          }
+    selectedStatusPerLead.addAll(
+        List<LeadStatusData>.filled(leadsListData.length, LeadStatusData()));
+    for (int i = 0; i < leadsListData.length; i++) {
+      for (int j = 0; j < leadStatusData.length; j++) {
+        if (leadsListData[i].status == leadStatusData[j].id) {
+          selectedStatusPerLead[i] = leadStatusData[j];
+          break;
         }
       }
-      isLeadLoading.value = false;
-    } else {}
+    }
+    isLeadLoading.value = false;
+    // } else {}
     isLeadLoading.value = false;
   }
 

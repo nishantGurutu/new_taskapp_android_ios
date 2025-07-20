@@ -260,62 +260,6 @@ class DatabaseHelper {
     return maps.map((map) => LeadStatusData.fromJson(map)).toList();
   }
 
-  // Future<void> insertLead({
-  //   required String leadName,
-  //   required String companyName,
-  //   required String phone,
-  //   required String email,
-  //   required String source,
-  //   required String industry,
-  //   required String status,
-  //   required String tag,
-  //   required String description,
-  //   required String address,
-  //   required String imagePath,
-  //   required String audioPath,
-  //   required double? latitude,
-  //   required double? longitude,
-  //   required String timestamp,
-  // }) async {
-  //   final db = await database;
-
-  //   await db.insert(
-  //     'leads',
-  //     {
-  //       'lead_name': leadName,
-  //       'company_name': companyName,
-  //       'phone': phone,
-  //       'email': email,
-  //       'source': source,
-  //       'industry': industry,
-  //       'status': status,
-  //       'tag': tag,
-  //       'description': description,
-  //       'address': address,
-  //       'latitude': latitude,
-  //       'longitude': longitude,
-  //       'image_path': imagePath,
-  //       'audio_path': audioPath,
-  //       'timestamp': timestamp,
-  //     },
-  //     conflictAlgorithm: ConflictAlgorithm.replace,
-  //   );
-
-  //   final insertedLeads = await db.query(
-  //     'leads',
-  //     where: 'timestamp = ?',
-  //     whereArgs: [timestamp],
-  //   );
-
-  //   if (insertedLeads.isNotEmpty) {
-  //     CustomToast()
-  //         .showCustomToast("Notwork not available, data daved locally.");
-  //     print('Lead successfully inserted:');
-  //     print(insertedLeads.first);
-  //   } else {
-  //     print('Failed to find the inserted lead in the database.');
-  //   }
-  // }
   Future<void> insertLead({
     required String leadName,
     required String companyName,
@@ -344,12 +288,12 @@ class DatabaseHelper {
           'source': source,
           'status': status,
           'description': description,
-          'address_line1': address, // Map address to address_line1
-          'image': imagePath, // Map image_path to image
-          'audio': audioPath, // Map audio_path to audio
+          'address_line1': address,
+          'image': imagePath,
+          'audio': audioPath,
           'latitude': latitude,
           'longitude': longitude,
-          'created_at': timestamp, // Map timestamp to created_at
+          'created_at': timestamp,
         },
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
