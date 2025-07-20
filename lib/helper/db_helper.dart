@@ -202,6 +202,21 @@ class DatabaseHelper {
     ''');
   }
 
+  Future<int> deleteLead(int id) async {
+    final db = await database;
+    try {
+      return await db.delete(
+        'leads',
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    } catch (e) {
+      print('Error deleting lead: $e');
+      CustomToast().showCustomToast("Failed to delete lead locally.");
+      return -1;
+    }
+  }
+
   Future<void> clearLeadsTable() async {
     final db = await instance.database;
     await db.delete('leads'); // replace 'leads' with your local table name
