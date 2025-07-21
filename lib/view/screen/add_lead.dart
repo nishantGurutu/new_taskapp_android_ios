@@ -479,69 +479,71 @@ class _AddLeadsState extends State<AddLeads> {
                                     if (leadController
                                             .addselectedLeadStatusData.value !=
                                         null) {
-                                      final connectivityResult =
-                                          await Connectivity()
-                                              .checkConnectivity();
-                                      bool isConnected = connectivityResult !=
-                                          ConnectivityResult.none;
+                                      bool isConnected =
+                                          await checkInternetConnection();
 
-                                      // if (isConnected) {
-                                      //   leadController.addLeads(
-                                      //     leadName: leadNameController.text,
-                                      //     companyName:
-                                      //         companyNameController.text,
-                                      //     phone: phoneController.text,
-                                      //     email: emailController.text,
-                                      //     source: leadController
-                                      //             .selectedSourceListData
-                                      //             .value
-                                      //             ?.id
-                                      //             ?.toString() ??
-                                      //         '',
-                                      //     status: leadController
-                                      //             .addselectedLeadStatusData
-                                      //             .value
-                                      //             ?.id
-                                      //             .toString() ??
-                                      //         "",
-                                      //     description:
-                                      //         descriptionController.text,
-                                      //     audio: attachment,
-                                      //   );
-                                      // } else {
-                                      await DatabaseHelper.instance.insertLead(
-                                        leadName: leadNameController.text,
-                                        companyName: companyNameController.text,
-                                        phone: phoneController.text,
-                                        email: emailController.text,
-                                        source: leadController
-                                                .selectedSourceListData
-                                                .value
-                                                ?.id
-                                                ?.toString() ??
-                                            '',
-                                        status: leadController
-                                                .addselectedLeadStatusData
-                                                .value
-                                                ?.id
-                                                ?.toString() ??
-                                            '',
-                                        description: descriptionController.text,
-                                        address: addressController.text,
-                                        imagePath: leadController
-                                            .pickedFile.value.path,
-                                        audioPath: attachment.path,
-                                        latitude: LocationHandler
-                                            .currentPosition?.latitude,
-                                        longitude: LocationHandler
-                                            .currentPosition?.longitude,
-                                        timestamp:
-                                            DateTime.now().toIso8601String(),
-                                      );
+                                      if (isConnected) {
+                                        leadController.addLeads(
+                                          leadName: leadNameController.text,
+                                          companyName:
+                                              companyNameController.text,
+                                          phone: phoneController.text,
+                                          email: emailController.text,
+                                          source: leadController
+                                                  .selectedSourceListData
+                                                  .value
+                                                  ?.id
+                                                  ?.toString() ??
+                                              '',
+                                          status: leadController
+                                                  .addselectedLeadStatusData
+                                                  .value
+                                                  ?.id
+                                                  .toString() ??
+                                              "",
+                                          description:
+                                              descriptionController.text,
+                                          audio: attachment,
+                                        );
+                                      } else {
+                                        await DatabaseHelper.instance
+                                            .insertLead(
+                                          leadName: leadNameController.text,
+                                          companyName:
+                                              companyNameController.text,
+                                          phone: phoneController.text,
+                                          email: emailController.text,
+                                          source: leadController
+                                                  .selectedSourceListData
+                                                  .value
+                                                  ?.id
+                                                  ?.toString() ??
+                                              '',
+                                          status: leadController
+                                                  .addselectedLeadStatusData
+                                                  .value
+                                                  ?.id
+                                                  ?.toString() ??
+                                              '',
+                                          description:
+                                              descriptionController.text,
+                                          address: addressController.text,
+                                          imagePath: leadController
+                                              .pickedFile.value.path,
+                                          audioPath: attachment.path,
+                                          latitude: LocationHandler
+                                              .currentPosition?.latitude,
+                                          longitude: LocationHandler
+                                              .currentPosition?.longitude,
+                                          timestamp:
+                                              DateTime.now().toIso8601String(),
+                                        );
 
-                                      leadController.leadsList(leadController
-                                          .addselectedLeadStatusData.value?.id);
-                                      // }
+                                        leadController.leadsList(leadController
+                                            .addselectedLeadStatusData
+                                            .value
+                                            ?.id);
+                                      }
                                       attachment = File('');
                                       leadController.pickedFile.value =
                                           File('');
@@ -597,6 +599,25 @@ class _AddLeadsState extends State<AddLeads> {
               ),
       ),
     );
+  }
+
+  Future<bool> checkInternetConnection() async {
+    var connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      return false;
+    }
+
+    try {
+      // Try pinging Google
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        return true;
+      }
+    } catch (e) {
+      return false;
+    }
+
+    return false;
   }
 
   File attachment = File('');
