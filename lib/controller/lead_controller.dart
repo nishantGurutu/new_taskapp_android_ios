@@ -838,7 +838,6 @@ class LeadController extends GetxController {
 
   Future<void> uploadOfflineLead(LeadListData lead) async {
     try {
-      // Assume audio is saved locally, get it from path
       File audioFile = File(lead.audio ?? '');
 
       final result = await LeadService().addLeadsApi(

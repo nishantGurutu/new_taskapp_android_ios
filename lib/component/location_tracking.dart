@@ -4,6 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart' as perm;
 import 'package:geocoding/geocoding.dart' as geocode;
+import 'package:task_management/constant/custom_toast.dart';
 import 'package:task_management/helper/db_helper.dart';
 import 'package:task_management/service/location_tracking_service.dart'; // Import DatabaseHelper
 
@@ -189,14 +190,33 @@ class LocationTrackerService {
       }
 
       // Listen for location updates and store in DB
+      // location.onLocationChanged.listen((LocationData currentLocation) async {
+      //   if (currentLocation.latitude != null &&
+      //       currentLocation.longitude != null) {
+      //     _currentPosition = currentLocation;
+      //     await _storeLocationInDb(currentLocation); // Store in DB
+      //     _getAddressFromLatLng(
+      //         currentLocation.latitude!, currentLocation.longitude!);
+      //     // Attempt to sync locations to API after storing
+      //     var connectivityResult = await Connectivity().checkConnectivity();
+      //     if (connectivityResult != ConnectivityResult.none) {
+      //       await _trackingService.syncLocationsToApi();
+      //     }
+      //   }
+      // });
+
       location.onLocationChanged.listen((LocationData currentLocation) async {
         if (currentLocation.latitude != null &&
             currentLocation.longitude != null) {
           _currentPosition = currentLocation;
-          await _storeLocationInDb(currentLocation); // Store in DB
+
+          CustomToast().showCustomToast(
+              'Location Updated: ${currentLocation.latitude}, ${currentLocation.longitude}');
+
+          await _storeLocationInDb(currentLocation);
           _getAddressFromLatLng(
               currentLocation.latitude!, currentLocation.longitude!);
-          // Attempt to sync locations to API after storing
+
           var connectivityResult = await Connectivity().checkConnectivity();
           if (connectivityResult != ConnectivityResult.none) {
             await _trackingService.syncLocationsToApi();

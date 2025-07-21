@@ -65,6 +65,7 @@ class _CreateQuotationScreenState extends State<CreateQuotationScreen> {
     rateController.dispose();
     securityPriceController.dispose();
     advanceMonthController.dispose();
+    leadController.items.clear();
     super.dispose();
   }
 

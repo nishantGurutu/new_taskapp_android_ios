@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:task_management/component/location_handler.dart';
 import 'package:task_management/component/location_service.dart';
 import 'package:task_management/constant/color_constant.dart';
+import 'package:task_management/constant/custom_toast.dart';
 import 'package:task_management/constant/text_constant.dart';
 import 'package:task_management/controller/attendence/attendence_controller.dart';
 import 'package:task_management/controller/attendence/checkin_user_details.dart';
@@ -454,20 +455,40 @@ class _CheckinScreenState extends State<CheckinScreen> {
                             () {
                               return InkWell(
                                 onTap: () async {
+                                  // if (!attendenceController
+                                  //     .isAttendencePunching.value) {
+                                  //   await availableCameras().then(
+                                  //     (value) => Get.to(
+                                  //       () => CameraView(
+                                  //         cameras: value,
+                                  //         type: "checkin",
+                                  //         latitude: latitude,
+                                  //         longitude: longitude,
+                                  //         attendenceTime: attendenceTime,
+                                  //         address: locaitonAddress.value,
+                                  //       ),
+                                  //     ),
+                                  //   );
                                   if (!attendenceController
                                       .isAttendencePunching.value) {
-                                    await availableCameras().then(
-                                      (value) => Get.to(
+                                    await locationName();
+
+                                    if (locaitonAddress.value.isNotEmpty) {
+                                      final cameras = await availableCameras();
+                                      Get.to(
                                         () => CameraView(
-                                          cameras: value,
+                                          cameras: cameras,
                                           type: "checkin",
                                           latitude: latitude,
                                           longitude: longitude,
                                           attendenceTime: attendenceTime,
                                           address: locaitonAddress.value,
                                         ),
-                                      ),
-                                    );
+                                      );
+                                    } else {
+                                      CustomToast().showCustomToast(
+                                          "Location not available. Try again.");
+                                    }
                                   }
                                 },
                                 child: Container(

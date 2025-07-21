@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:task_management/component/location_tracking.dart';
 import 'package:task_management/controller/bottom_bar_navigation_controller.dart';
@@ -72,13 +73,13 @@ Future<void> main() async {
     debugPrint('Failed to initialize location tracking service');
   }
 
-  bool isBackgroundModeEnabled =
-      await LocationTrackerService.enableBackgroundMode();
-  if (!isBackgroundModeEnabled) {
-    debugPrint('Failed to enable background location mode');
-  }
-  // await LocationTrackerService.initialize();
-  // await LocationTrackerService.enableBackgroundMode();
+  // bool isBackgroundModeEnabled =
+  //     await LocationTrackerService.enableBackgroundMode();
+  // if (!isBackgroundModeEnabled) {
+  //   debugPrint('Failed to enable background location mode');
+  // }
+  await LocationTrackerService.initialize();
+  await LocationTrackerService.enableBackgroundMode();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -112,6 +113,115 @@ Future<void> main() async {
     ),
   );
 }
+
+Location location = Location();
+LocationData? _currentPosition;
+String _currentAddress = "";
+
+/// Starts location tracking and stores location data in the database.
+// Future<void> _getLocation() async {
+//   try {
+//     bool _serviceEnabled = await location.serviceEnabled();
+//     if (!_serviceEnabled) {
+//       _serviceEnabled = await location.requestService();
+//       if (!_serviceEnabled) {
+//         print('Location service disabled');
+//         return;
+//       }
+//     }
+
+//     PermissionStatus _permissionGranted = await location.hasPermission();
+//     if (_permissionGranted == PermissionStatus.denied) {
+//       _permissionGranted = await location.requestPermission();
+//       if (_permissionGranted != PermissionStatus.granted) {
+//         print('Location permission denied');
+//         return;
+//       }
+//     }
+
+//     // Get initial location and store in DB
+//     LocationData initialLocation = await location.getLocation();
+//     if (initialLocation.latitude != null && initialLocation.longitude != null) {
+//       _currentPosition = initialLocation;
+//       await _storeLocationInDb(initialLocation); // Store in DB
+//       _getAddressFromLatLng(
+//           initialLocation.latitude!, initialLocation.longitude!);
+//       // Attempt to sync locations to API after storing
+//       var connectivityResult = await Connectivity().checkConnectivity();
+//       if (connectivityResult != ConnectivityResult.none) {
+//         await _trackingService.syncLocationsToApi();
+//       }
+//     }
+
+//     // Listen for location updates and store in DB
+//     // location.onLocationChanged.listen((LocationData currentLocation) async {
+//     //   if (currentLocation.latitude != null &&
+//     //       currentLocation.longitude != null) {
+//     //     _currentPosition = currentLocation;
+//     //     await _storeLocationInDb(currentLocation); // Store in DB
+//     //     _getAddressFromLatLng(
+//     //         currentLocation.latitude!, currentLocation.longitude!);
+//     //     // Attempt to sync locations to API after storing
+//     //     var connectivityResult = await Connectivity().checkConnectivity();
+//     //     if (connectivityResult != ConnectivityResult.none) {
+//     //       await _trackingService.syncLocationsToApi();
+//     //     }
+//     //   }
+//     // });
+
+//     location.onLocationChanged.listen((LocationData currentLocation) async {
+//       if (currentLocation.latitude != null &&
+//           currentLocation.longitude != null) {
+//         _currentPosition = currentLocation;
+
+//         CustomToast().showCustomToast(
+//             'Location Updated: ${currentLocation.latitude}, ${currentLocation.longitude}');
+
+//         await _storeLocationInDb(currentLocation);
+//         _getAddressFromLatLng(
+//             currentLocation.latitude!, currentLocation.longitude!);
+
+//         var connectivityResult = await Connectivity().checkConnectivity();
+//         if (connectivityResult != ConnectivityResult.none) {
+//           await _trackingService.syncLocationsToApi();
+//         }
+//       }
+//     });
+//   } catch (e) {
+//     print('Error getting location: $e');
+//   }
+// }
+
+// /// Stores location data in the database.
+// Future<void> _storeLocationInDb(LocationData locationData) async {
+//   try {
+//     await _dbHelper.insertLocation(
+//       locationData.latitude!,
+//       locationData.longitude!,
+//       DateTime.now().toIso8601String(), // Timestamp
+//       locationData.accuracy ?? 0.0,
+//       locationData.altitude ?? 0.0,
+//       locationData.speed ?? 0.0,
+//     );
+//     print(
+//         'Location stored in database: ${locationData.latitude}, ${locationData.longitude}');
+//   } catch (e) {
+//     print('Error storing location in database: $e');
+//   }
+// }
+
+// /// Converts latitude and longitude to an address.
+// Future<void> _getAddressFromLatLng(double lat, double lng) async {
+//   try {
+//     List<geocode.Placemark> placemarks =
+//         await geocode.placemarkFromCoordinates(lat, lng);
+//     geocode.Placemark place = placemarks[0];
+//     _currentAddress =
+//         "${place.locality}, ${place.postalCode}, ${place.country}";
+//   } catch (e) {
+//     print('Error getting address: $e');
+//   }
+// }
 
 Future<void> requestPermissionHandlar() async {
   if (await Permission.ignoreBatteryOptimizations.isDenied) {

@@ -26,10 +26,10 @@ class NetworkService {
           await _uploadOfflineLead(lead);
         }
 
-        Fluttertoast.showToast(
-          msg: "api calling",
-          toastLength: Toast.LENGTH_SHORT,
-        );
+        // Fluttertoast.showToast(
+        //   msg: "api calling",
+        //   toastLength: Toast.LENGTH_SHORT,
+        // );
       } else {
         Fluttertoast.showToast(
           msg: "No Internet Connection",

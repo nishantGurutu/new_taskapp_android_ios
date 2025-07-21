@@ -29,19 +29,19 @@ class QuotationListModel {
 
 class QuotationListData {
   int? id;
-  int? revisedFromId;
-  String? quotationNumber;
-  int? userId;
-  int? leadId;
-  String? transactionDate;
-  String? validTill;
-  String? quotationType;
-  int? rate;
-  int? advanceMonth;
-  int? securityPrice;
-  int? status;
-  String? createdAt;
-  String? updatedAt;
+  dynamic revisedFromId;
+  dynamic quotationNumber;
+  dynamic userId;
+  dynamic leadId;
+  dynamic transactionDate;
+  dynamic validTill;
+  dynamic quotationType;
+  dynamic rate;
+  dynamic advanceMonth;
+  dynamic securityPrice;
+  dynamic status;
+  dynamic createdAt;
+  dynamic updatedAt;
   Lead? lead;
   List<QuotationProducts>? quotationProducts;
 
@@ -116,19 +116,19 @@ class QuotationListData {
 
 class Lead {
   int? id;
-  String? leadNumber;
-  int? userId;
-  String? leadName;
-  String? leadType;
-  String? company;
-  String? phone;
-  String? email;
-  int? source;
+  dynamic leadNumber;
+  dynamic userId;
+  dynamic leadName;
+  dynamic leadType;
+  dynamic company;
+  dynamic phone;
+  dynamic email;
+  dynamic source;
   dynamic designation;
   dynamic gender;
-  int? status;
+  dynamic status;
   dynamic noOfProject;
-  String? description;
+  dynamic description;
   dynamic regionalOfc;
   dynamic referenceDetails;
   dynamic image;
@@ -142,13 +142,13 @@ class Lead {
   dynamic country;
   dynamic state;
   dynamic visitingCard;
-  String? latitude;
-  String? longitude;
+  dynamic latitude;
+  dynamic longitude;
   dynamic peopleAdded;
   dynamic assignedTo;
-  int? isDeleted;
-  String? createdAt;
-  String? updatedAt;
+  dynamic isDeleted;
+  dynamic createdAt;
+  dynamic updatedAt;
 
   Lead(
       {this.id,
@@ -265,13 +265,13 @@ class Lead {
 
 class QuotationProducts {
   int? id;
-  int? quotationId;
-  int? productId;
-  int? quantity;
+  dynamic quotationId;
+  dynamic productId;
+  dynamic quantity;
   dynamic priceType;
-  String? quotedPrice;
-  String? createdAt;
-  String? updatedAt;
+  dynamic quotedPrice;
+  dynamic createdAt;
+  dynamic updatedAt;
   Product? product;
 
   QuotationProducts(
@@ -317,19 +317,19 @@ class QuotationProducts {
 
 class Product {
   int? id;
-  int? userId;
-  String? name;
-  String? purchasePrice;
-  double? length;
-  String? weight;
+  dynamic userId;
+  dynamic name;
+  dynamic purchasePrice;
+  dynamic length;
+  dynamic weight;
   dynamic diameter;
-  String? rentalPrice;
-  String? unit;
-  String? image;
-  int? status;
-  int? isDeleted;
-  String? createdAt;
-  String? updatedAt;
+  dynamic rentalPrice;
+  dynamic unit;
+  dynamic image;
+  dynamic status;
+  dynamic isDeleted;
+  dynamic createdAt;
+  dynamic updatedAt;
 
   Product(
       {this.id,
