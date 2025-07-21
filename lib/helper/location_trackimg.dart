@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_management/helper/db_helper.dart';
 
 class LocationPage extends StatefulWidget {
   @override
@@ -10,10 +12,20 @@ class _LocationPageState extends State<LocationPage> {
   Location location = Location();
   LocationData? _currentPosition;
   String _currentAddress = "";
+  List<Map<String, dynamic>> locationData = [];
 
   @override
   void initState() {
     super.initState();
+    _loadLocationData();
+  }
+
+  void _loadLocationData() async {
+    final dbHelper = DatabaseHelper.instance;
+    final data = await dbHelper.getLocations();
+    setState(() {
+      locationData = data;
+    });
   }
 
   @override
@@ -22,24 +34,19 @@ class _LocationPageState extends State<LocationPage> {
       appBar: AppBar(
         title: Text("Location Example"),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            if (_currentPosition != null)
-              Text(
-                "Latitude: ${_currentPosition?.latitude ?? 0.0}, Longitude: ${_currentPosition?.longitude ?? 0.0}",
-              ),
-            if (_currentAddress != "")
-              Text(
-                "Address: $_currentAddress",
-              ),
-            ElevatedButton(
-              onPressed: () {},
-              child: Text("Get Location"),
-            ),
-          ],
-        ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: locationData.isEmpty
+                ? Center(child: Text('No Data'))
+                : ListView.builder(
+                    itemCount: locationData.length,
+                    itemBuilder: (context, index) {
+                      return Text('${locationData[index]['latitude']}');
+                    },
+                  ),
+          )
+        ],
       ),
     );
   }

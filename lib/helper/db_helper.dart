@@ -18,7 +18,7 @@ class DatabaseHelper {
   }
 
   Future<Database> initDatabase() async {
-    String path = join(await getDatabasesPath(), 'canwinn_pro2.db');
+    String path = join(await getDatabasesPath(), 'canwinn_pro3.db');
     return await openDatabase(path,
         version: 7, onCreate: _createDb, onUpgrade: _onUpgrade);
   }
@@ -126,9 +126,6 @@ class DatabaseHelper {
         latitude REAL,
         longitude REAL,
         timestamp TEXT,
-        accuracy REAL,
-        altitude REAL,
-        speed REAL,
         is_synced INTEGER DEFAULT 0
       )
     ''');
@@ -333,38 +330,52 @@ class DatabaseHelper {
     return await db.query('leads');
   }
 
-  Future<void> insertLocation(double latitude, double longitude,
-      String timestamp, double accuracy, double altitude, double speed) async {
-    final db = await database;
-    await db.insert(
-      'locations',
-      {
+  Future<void> insertLocation(
+    double latitude,
+    double longitude,
+    String timestamp,
+  ) async {
+    try {
+      final db = await database;
+      await db.insert('locations', {
         'latitude': latitude,
         'longitude': longitude,
         'timestamp': timestamp,
-        'accuracy': accuracy,
-        'altitude': altitude,
-        'speed': speed,
         'is_synced': 0,
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+      });
+      print('Inserted location: $latitude, $longitude at $timestamp');
+      CustomToast().showCustomToast('Locations saved successfully. in db');
+    } catch (e) {
+      print('Error inserting location: $e');
+      rethrow; // Rethrow to allow caller to handle the error
+    }
   }
 
   Future<List<Map<String, dynamic>>> getUnsyncedLocations() async {
-    final db = await database;
-    return await db.query('locations', where: 'is_synced = ?', whereArgs: [0]);
+    try {
+      final db = await database;
+      return await db
+          .query('locations', where: 'is_synced = ?', whereArgs: [0]);
+    } catch (e) {
+      print('Error fetching unsynced locations: $e');
+      return [];
+    }
   }
 
-  Future<void> markLocationsAsSynced(List<int> locationIds) async {
-    final db = await database;
-    for (var id in locationIds) {
-      await db.update(
-        'locations',
-        {'is_synced': 1},
-        where: 'id = ?',
-        whereArgs: [id],
-      );
+  // // Optional: Method to retrieve stored locations for debugging
+  // Future<List<Map<String, dynamic>>> getLocations() async {
+  //   final db = await database;
+  //   return await db.query('locations');
+  // }
+
+  Future<List<Map<String, dynamic>>> getLocations() async {
+    try {
+      final db = await database;
+      return await db.query('locations');
+    } catch (e) {
+      print('Error fetching locations: $e');
+      CustomToast().showCustomToast('Failed to fetch locations');
+      return [];
     }
   }
 }
