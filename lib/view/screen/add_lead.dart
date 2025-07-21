@@ -539,7 +539,8 @@ class _AddLeadsState extends State<AddLeads> {
                                             DateTime.now().toIso8601String(),
                                       );
 
-                                      leadController.getOflineLeadList();
+                                      leadController.leadsList(leadController
+                                          .addselectedLeadStatusData.value?.id);
                                       // }
                                       attachment = File('');
                                       leadController.pickedFile.value =
