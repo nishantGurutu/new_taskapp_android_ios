@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:task_management/component/location_tracking.dart';
 import 'package:task_management/controller/lead_controller.dart';
 import 'package:task_management/helper/storage_helper.dart';
 import 'package:task_management/model/login_model.dart';
@@ -64,6 +65,7 @@ class RegisterController extends GetxController {
       loginModel.value = result;
       await leadController.statusListApi(status: '');
       await leadController.sourceList(source: '');
+      await LocationTrackerService().getCurrentLocation();
     } else {}
     isLoginLoading.value = false;
   }

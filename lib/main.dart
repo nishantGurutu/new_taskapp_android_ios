@@ -9,6 +9,7 @@ import 'package:flutter_background_service/flutter_background_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:task_management/component/location_tracking.dart';
 import 'package:task_management/controller/bottom_bar_navigation_controller.dart';
 import 'package:task_management/controller_binding.dart';
 import 'package:task_management/firebase_messaging/notification_service.dart';
@@ -65,6 +66,19 @@ Future<void> main() async {
       await _firebaseMessagingBackgroundHandler);
   await EasyLocalization.ensureInitialized();
   await LocalNotificationService.initialize();
+  // Initialize location tracking service and handle errors
+  bool isLocationInitialized = await LocationTrackerService.initialize();
+  if (!isLocationInitialized) {
+    debugPrint('Failed to initialize location tracking service');
+  }
+
+  bool isBackgroundModeEnabled =
+      await LocationTrackerService.enableBackgroundMode();
+  if (!isBackgroundModeEnabled) {
+    debugPrint('Failed to enable background location mode');
+  }
+  // await LocationTrackerService.initialize();
+  // await LocationTrackerService.enableBackgroundMode();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -112,6 +126,7 @@ Future<void> requestPermissions() async {
     Permission.locationAlways,
     Permission.accessMediaLocation,
     Permission.location,
+    Permission.locationAlways,
     Permission.camera,
     Permission.microphone,
     Permission.notification,

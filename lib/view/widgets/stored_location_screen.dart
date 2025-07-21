@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:task_management/helper/db_helper.dart';
-import 'package:task_management/helper/storage_helper.dart';
 
 class StoredLocationPage extends StatefulWidget {
   @override
@@ -24,12 +22,12 @@ class _StoredLocationPageState extends State<StoredLocationPage> {
         isLoading = true;
         errorMessage = null;
       });
-      final data = await DatabaseHelper.instance
-          .getLocationHistory(StorageHelper.getId().toString());
-      setState(() {
-        locationDataList = data;
-        isLoading = false;
-      });
+      // final data = await DatabaseHelper.instance
+      //     .getLocationHistory(StorageHelper.getId().toString());
+      // setState(() {
+      //   locationDataList = data;
+      //   isLoading = false;
+      // });
     } catch (e) {
       setState(() {
         isLoading = false;

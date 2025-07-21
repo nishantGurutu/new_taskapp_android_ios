@@ -279,103 +279,103 @@ class _SideDrawerState extends State<SideDrawer> {
                           ),
                         ),
                         SizedBox(height: 10.h),
-                        InkWell(
-                          onTap: () {
-                            bottomBarController.selectedTabIndex.value = 50;
-                            Get.back();
-                            Get.to(() => LocationPage());
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          50
-                                      ? selectedTabColor
-                                      : whiteColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(6.r),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  left: 10.w, top: 7.h, bottom: 7.h),
-                              child: Row(
-                                spacing: 10.w,
-                                children: [
-                                  SvgPicture.asset(
-                                    drawerTaskicon,
-                                    color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            50
-                                        ? whiteColor
-                                        : textColor,
-                                    height: 20.h,
-                                  ),
-                                  Text(
-                                    "Location Page",
-                                    style: TextStyle(
-                                        color: bottomBarController
-                                                    .selectedTabIndex.value ==
-                                                50
-                                            ? whiteColor
-                                            : textColor,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10.h),
-                        InkWell(
-                          onTap: () {
-                            bottomBarController.selectedTabIndex.value = 50;
-                            Get.back();
-                            Get.to(() => StoredLocationPage());
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color:
-                                  bottomBarController.selectedTabIndex.value ==
-                                          50
-                                      ? selectedTabColor
-                                      : whiteColor,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(6.r),
-                              ),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                  left: 10.w, top: 7.h, bottom: 7.h),
-                              child: Row(
-                                spacing: 10.w,
-                                children: [
-                                  SvgPicture.asset(
-                                    drawerTaskicon,
-                                    color: bottomBarController
-                                                .selectedTabIndex.value ==
-                                            50
-                                        ? whiteColor
-                                        : textColor,
-                                    height: 20.h,
-                                  ),
-                                  Text(
-                                    "Stored Location",
-                                    style: TextStyle(
-                                        color: bottomBarController
-                                                    .selectedTabIndex.value ==
-                                                50
-                                            ? whiteColor
-                                            : textColor,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                        // InkWell(
+                        //   onTap: () {
+                        //     bottomBarController.selectedTabIndex.value = 50;
+                        //     Get.back();
+                        //     Get.to(() => LocationPage());
+                        //   },
+                        //   child: Container(
+                        //     decoration: BoxDecoration(
+                        //       color:
+                        //           bottomBarController.selectedTabIndex.value ==
+                        //                   50
+                        //               ? selectedTabColor
+                        //               : whiteColor,
+                        //       borderRadius: BorderRadius.all(
+                        //         Radius.circular(6.r),
+                        //       ),
+                        //     ),
+                        //     child: Padding(
+                        //       padding: EdgeInsets.only(
+                        //           left: 10.w, top: 7.h, bottom: 7.h),
+                        //       child: Row(
+                        //         spacing: 10.w,
+                        //         children: [
+                        //           SvgPicture.asset(
+                        //             drawerTaskicon,
+                        //             color: bottomBarController
+                        //                         .selectedTabIndex.value ==
+                        //                     50
+                        //                 ? whiteColor
+                        //                 : textColor,
+                        //             height: 20.h,
+                        //           ),
+                        //           Text(
+                        //             "Location Page",
+                        //             style: TextStyle(
+                        //                 color: bottomBarController
+                        //                             .selectedTabIndex.value ==
+                        //                         50
+                        //                     ? whiteColor
+                        //                     : textColor,
+                        //                 fontSize: 18,
+                        //                 fontWeight: FontWeight.w500),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // SizedBox(height: 10.h),
+                        // InkWell(
+                        //   onTap: () {
+                        //     bottomBarController.selectedTabIndex.value = 50;
+                        //     Get.back();
+                        //     Get.to(() => StoredLocationPage());
+                        //   },
+                        //   child: Container(
+                        //     decoration: BoxDecoration(
+                        //       color:
+                        //           bottomBarController.selectedTabIndex.value ==
+                        //                   50
+                        //               ? selectedTabColor
+                        //               : whiteColor,
+                        //       borderRadius: BorderRadius.all(
+                        //         Radius.circular(6.r),
+                        //       ),
+                        //     ),
+                        //     child: Padding(
+                        //       padding: EdgeInsets.only(
+                        //           left: 10.w, top: 7.h, bottom: 7.h),
+                        //       child: Row(
+                        //         spacing: 10.w,
+                        //         children: [
+                        //           SvgPicture.asset(
+                        //             drawerTaskicon,
+                        //             color: bottomBarController
+                        //                         .selectedTabIndex.value ==
+                        //                     50
+                        //                 ? whiteColor
+                        //                 : textColor,
+                        //             height: 20.h,
+                        //           ),
+                        //           Text(
+                        //             "Stored Location",
+                        //             style: TextStyle(
+                        //                 color: bottomBarController
+                        //                             .selectedTabIndex.value ==
+                        //                         50
+                        //                     ? whiteColor
+                        //                     : textColor,
+                        //                 fontSize: 18,
+                        //                 fontWeight: FontWeight.w500),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                         SizedBox(height: 10.h),
                         InkWell(
                           onTap: () {

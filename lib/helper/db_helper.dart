@@ -18,7 +18,7 @@ class DatabaseHelper {
   }
 
   Future<Database> initDatabase() async {
-    String path = join(await getDatabasesPath(), 'canwinn_pro1.db');
+    String path = join(await getDatabasesPath(), 'canwinn_pro2.db');
     return await openDatabase(path,
         version: 7, onCreate: _createDb, onUpgrade: _onUpgrade);
   }
@@ -123,13 +123,13 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE locations (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        employee_id TEXT,
         latitude REAL,
         longitude REAL,
         timestamp TEXT,
         accuracy REAL,
         altitude REAL,
-        speed REAL
+        speed REAL,
+        is_synced INTEGER DEFAULT 0
       )
     ''');
     await db.execute('''
@@ -333,39 +333,38 @@ class DatabaseHelper {
     return await db.query('leads');
   }
 
-  Future<void> insertLocation(
-      String employeeId,
-      double latitude,
-      double longitude,
-      String timestamp,
-      double accuracy,
-      double altitude,
-      double speed) async {
+  Future<void> insertLocation(double latitude, double longitude,
+      String timestamp, double accuracy, double altitude, double speed) async {
     final db = await database;
     await db.insert(
       'locations',
       {
-        'employee_id': employeeId,
         'latitude': latitude,
         'longitude': longitude,
         'timestamp': timestamp,
         'accuracy': accuracy,
         'altitude': altitude,
         'speed': speed,
+        'is_synced': 0,
       },
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
-  // Method to get location history for a user
-  Future<List<Map<String, dynamic>>> getLocationHistory(
-      String employeeId) async {
+  Future<List<Map<String, dynamic>>> getUnsyncedLocations() async {
     final db = await database;
-    return await db.query(
-      'locations',
-      where: 'employee_id = ?',
-      whereArgs: [employeeId],
-      orderBy: 'timestamp DESC',
-    );
+    return await db.query('locations', where: 'is_synced = ?', whereArgs: [0]);
+  }
+
+  Future<void> markLocationsAsSynced(List<int> locationIds) async {
+    final db = await database;
+    for (var id in locationIds) {
+      await db.update(
+        'locations',
+        {'is_synced': 1},
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+    }
   }
 }
