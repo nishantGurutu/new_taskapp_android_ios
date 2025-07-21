@@ -1322,7 +1322,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                       Get.to(() => LeadList(status: 'lost'));
                     },
                     child: TaskInfo(
-                      "Lost Leads",
+                      "Future Leads",
                       leadData?.closedLeads ?? 0,
                       assignedTaskSvgIcon,
                       Colors.blue,
