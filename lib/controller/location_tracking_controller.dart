@@ -11,7 +11,7 @@
 //       String modelName,
 //       String appVersion) async {
 //     isLoginLoading.value = true;
-//     final result = await LocationTrackingService().locationTracking();
+//     final result = await LocationTrackingService().syncLocationsToApi();
 //     if (result != null) {
 //     } else {}
 //     isLoginLoading.value = false;

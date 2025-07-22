@@ -50,6 +50,7 @@ class _CreateQuotationScreenState extends State<CreateQuotationScreen> {
   void initState() {
     leadController.selectedQuotation.value = '';
     leadTextController.text = widget.leadNumber ?? '';
+    leadController.items.clear();
     Future.microtask(() {
       leadController.productListApi();
     });

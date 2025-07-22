@@ -257,7 +257,17 @@ void onStart(ServiceInstance service) async {
 
     log.add('$currentTime - $locationInfo');
     _storeLocationInDb(lat: position?.latitude, lon: position?.longitude);
+
+    // preferences.setString("token", loginModel.data?.token ?? "");
+    final token = preferences.getString('token');
+    if (token != null && token.isNotEmpty) {
+      await LocationTrackingService().syncLocationsToApi(token: token);
+    } else {
+      print("Token is null or empty in background service.");
+    }
+    await LocationTrackingService().syncLocationsToApi(token: token ?? '');
     await preferences.setStringList('log', log);
+
     Fluttertoast.showToast(
       msg: "FLUTTER BACKGROUND SERVICE: $currentTime - $locationInfo'",
       toastLength: Toast.LENGTH_SHORT,

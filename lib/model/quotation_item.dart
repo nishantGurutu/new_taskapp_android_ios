@@ -1,8 +1,8 @@
 class QuotationItem {
   final int productId;
   final String productName;
-  int quantity;
-  String rate;
+  dynamic quantity;
+  dynamic rate;
 
   QuotationItem({
     required this.productId,

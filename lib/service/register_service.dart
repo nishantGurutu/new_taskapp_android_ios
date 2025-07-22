@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management/api/api_constant.dart';
 import 'package:task_management/constant/custom_toast.dart';
 import 'package:task_management/controller/attendence/checkin_user_details.dart';
@@ -59,6 +60,8 @@ class RegisterService {
     required String appVersion,
   }) async {
     try {
+      final SharedPreferences preferences =
+          await SharedPreferences.getInstance();
       print('device key val $key');
       final response = await _dio.post(
         ApiConstant.baseUrl + ApiConstant.login,
@@ -76,6 +79,7 @@ class RegisterService {
         CustomToast().showCustomToast(response.data['message']);
         LoginModel loginModel = LoginModel.fromJson(response.data);
         if (response.data['status'] == true) {
+          preferences.setString("token", loginModel.data?.token ?? "");
           StorageHelper.setId(loginModel.data?.id ?? 0);
           StorageHelper.setIshead(loginModel.data?.isHead ?? 0);
           StorageHelper.setName(loginModel.data?.name ?? "");

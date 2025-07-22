@@ -758,13 +758,13 @@ class LeadController extends GetxController {
   var isQuotationAdding = false.obs;
   Future<void> addQuotationApi({
     required leadId,
-    required String lead,
-    required String transaction,
-    required String valid,
-    required String type,
-    required String rate,
-    required int advance,
-    required int security,
+    required dynamic lead,
+    required dynamic transaction,
+    required dynamic valid,
+    required dynamic type,
+    required dynamic rate,
+    required dynamic advance,
+    required dynamic security,
     int? revisedId,
   }) async {
     isQuotationAdding.value = true;
@@ -955,14 +955,14 @@ class LeadController extends GetxController {
   final TextEditingController rateControlelr = TextEditingController();
   RxList<QuotationItem> items = <QuotationItem>[].obs;
   Future<void> addItemToList({int? productId, String? productName}) async {
-    String qty = qtyControlelr.text.trim();
-    String rate = rateControlelr.text.trim();
+    String qty = qtyControlelr.text;
+    String rate = rateControlelr.text;
 
     if (productId.toString().isNotEmpty && qty.isNotEmpty && rate.isNotEmpty) {
       items.add(QuotationItem(
           productName: productName.toString(),
           productId: productId ?? 0,
-          quantity: int.parse(qty),
+          quantity: qty,
           rate: rate));
       Get.back();
       clearFormFields();

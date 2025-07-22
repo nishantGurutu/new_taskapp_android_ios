@@ -48,8 +48,6 @@ class _UpdateQuotationScreenState extends State<UpdateQuotationScreen> {
     final rawDate2 = widget.quotationData.transactionDate ?? "";
     final parsedDate2 = DateTime.parse(rawDate2); // Parse ISO format
     final formattedDate2 = DateFormat('dd-MM-yyyy').format(parsedDate2);
-    // transactionDateController.text =
-    //     widget.quotationData.transactionDate!.split(' ').first;
     validTillController.text = formattedDate2;
     leadController.selectedQuotation.value =
         widget.quotationData.quotationType ?? "";
@@ -69,13 +67,7 @@ class _UpdateQuotationScreenState extends State<UpdateQuotationScreen> {
           productName: product?.name ?? "",
           productId: product?.id ?? 0,
           quantity: widget.quotationData.quotationProducts![i].quantity ?? 0,
-          rate: int.tryParse(widget
-                          .quotationData.quotationProducts![i].quotedPrice
-                          ?.split('.')
-                          ?.first ??
-                      "0")
-                  ?.toString() ??
-              "0",
+          rate: widget.quotationData.quotationProducts![i].quotedPrice,
         ),
       );
     }
@@ -567,7 +559,6 @@ class _UpdateQuotationScreenState extends State<UpdateQuotationScreen> {
                     : ListView.builder(
                         itemCount: leadController.items.length,
                         itemBuilder: (_, index) {
-                          final item = leadController.items[index];
                           return Padding(
                             padding: EdgeInsets.symmetric(vertical: 4.h),
                             child: Container(
@@ -579,7 +570,7 @@ class _UpdateQuotationScreenState extends State<UpdateQuotationScreen> {
                                     Expanded(
                                       child: Center(
                                           child: Text(
-                                        '${item.productName ?? ''}',
+                                        '${leadController.items[index].productName ?? ''}',
                                         style: TextStyle(
                                             fontSize: 13.sp, color: textColor),
                                       )),
@@ -587,7 +578,7 @@ class _UpdateQuotationScreenState extends State<UpdateQuotationScreen> {
                                     Expanded(
                                       child: Center(
                                           child: Text(
-                                        '${item.quantity ?? ''}',
+                                        '${leadController.items[index].quantity ?? ''}',
                                         style: TextStyle(
                                             fontSize: 13.sp, color: textColor),
                                       )),
@@ -595,7 +586,7 @@ class _UpdateQuotationScreenState extends State<UpdateQuotationScreen> {
                                     Expanded(
                                       child: Center(
                                           child: Text(
-                                        '${item.rate ?? ''}',
+                                        '${leadController.items[index].rate ?? ''}',
                                         style: TextStyle(
                                             fontSize: 13.sp, color: textColor),
                                       )),
@@ -629,10 +620,6 @@ class _UpdateQuotationScreenState extends State<UpdateQuotationScreen> {
               ),
               onPressed: () {
                 if (leadController.isQuotationAdding.value == false) {
-                  int advanceValue =
-                      int.parse(advanceMonthController.text.toString());
-                  int securityValue =
-                      int.parse(securityPriceController.text.toString());
                   leadController.addQuotationApi(
                       leadId: widget.leadId,
                       lead: leadTextController.text,
@@ -640,8 +627,8 @@ class _UpdateQuotationScreenState extends State<UpdateQuotationScreen> {
                       valid: validTillController.text,
                       type: leadController.selectedQuotation.value,
                       rate: rateController.text,
-                      advance: advanceValue,
-                      security: securityValue,
+                      advance: advanceMonthController.text.toString(),
+                      security: securityPriceController.text.toString(),
                       revisedId: widget.quotationData.id);
                 }
               },

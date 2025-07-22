@@ -849,14 +849,14 @@ class LeadService {
 
   Future<bool> addQuotationApi(
     int leadId,
-    String transaction,
-    String valid,
-    String type,
-    String rate,
-    int advance,
-    int security,
+    dynamic transaction,
+    dynamic valid,
+    dynamic type,
+    dynamic rate,
+    dynamic advance,
+    dynamic security,
     RxList<QuotationItem> items,
-    int? revisedId,
+    dynamic revisedId,
   ) async {
     try {
       final token = StorageHelper.getToken();
